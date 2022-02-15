@@ -1,4 +1,4 @@
 package de.humboldtgym.amx.models;
 
-public record Route() {
+public class Route {
 }

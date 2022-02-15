@@ -1,4 +1,5 @@
 package de.humboldtgym.amx.models;
 
-public record Aircraft() {
+public class Aircraft {
+
 }
