@@ -1,5 +1,6 @@
 package de.humboldtgym.amx;
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import org.apache.logging.log4j.LogManager;
@@ -10,7 +11,7 @@ public class Main {
         logger.info("AMX version 1.0 starting...");
 
         logger.trace("Setting up look and feel...");
-        FlatLaf.setup(new FlatLightLaf());
+        FlatLaf.setup(new FlatDarkLaf());
 
         logger.trace("Creating application instance...");
         var application = Application.getInstance();

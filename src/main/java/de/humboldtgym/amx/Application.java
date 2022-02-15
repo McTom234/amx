@@ -27,6 +27,7 @@ public class Application {
     }
 
     public void run() {
+        this.window.reloadContent();
         this.window.setVisible(true);
     }
 
