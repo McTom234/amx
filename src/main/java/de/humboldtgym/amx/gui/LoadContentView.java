@@ -1,6 +1,7 @@
 package de.humboldtgym.amx.gui;
 
 import de.humboldtgym.amx.Application;
+import de.humboldtgym.amx.exceptions.DataException;
 import de.humboldtgym.amx.gui.events.ReloadContentEvent;
 
 import javax.swing.*;
@@ -28,13 +29,13 @@ public class LoadContentView extends JPanel {
         add(createButton, constraints);
     }
 
-    private void openCallback(ActionEvent e) {
+    private void openCallback(ActionEvent event) {
         var fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Open data set");
         fileChooser.setFileFilter(new FileFilter() {
             @Override
             public boolean accept(File f) {
-                return f.getName().endsWith(".json");
+                return f.isDirectory() || f.getName().endsWith(".json");
             }
 
             @Override
@@ -48,6 +49,18 @@ public class LoadContentView extends JPanel {
         if(result == JFileChooser.APPROVE_OPTION) {
             var selected = fileChooser.getSelectedFile();
             Application.getInstance().getLogger().debug("Opening file {}", selected);
+
+            try {
+                Application.getInstance().getDataManager().loadDataSet(selected.toPath());
+                SwingUtilities.getRoot(this).dispatchEvent(new ReloadContentEvent(this));
+            } catch (DataException e) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        e.getMessage(),
+                        "Data loading failed",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
         }
     }
 
