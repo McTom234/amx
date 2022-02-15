@@ -1,8 +1,10 @@
 package de.humboldtgym.amx.gui;
 
 import de.humboldtgym.amx.Application;
+import de.humboldtgym.amx.gui.events.ReloadContentEvent;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class MainWindow extends JFrame {
     public MainWindow() {
@@ -17,10 +19,21 @@ public class MainWindow extends JFrame {
         var loadedSet = Application.getInstance().getDataManager().getLoadedSet();
 
         if(loadedSet != null) {
-            // TODO: display data editor
-            throw new IllegalStateException("UNIMPLEMENTED");
+            setContentPane(new DataContentView());
+            revalidate();
         } else {
             setContentPane(new LoadContentView());
         }
+    }
+
+    @Override
+    protected void processEvent(AWTEvent e) {
+        Application.getInstance().getLogger().debug("Processing event {}", e);
+        if(e instanceof ReloadContentEvent) {
+            reloadContent();
+            return;
+        }
+
+        super.processEvent(e);
     }
 }

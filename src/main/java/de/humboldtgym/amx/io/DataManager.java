@@ -43,6 +43,10 @@ public class DataManager {
         }
     }
 
+    public void newSet() {
+        this.loadedSet = new DataSet();
+    }
+
     public DataSet getLoadedSet() {
         return loadedSet;
     }
