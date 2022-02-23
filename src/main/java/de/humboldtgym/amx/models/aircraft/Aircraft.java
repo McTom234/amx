@@ -4,16 +4,20 @@ import de.humboldtgym.amx.models.enums.WeightClass;
 
 import java.util.Date;
 
-public class Aircraft extends AircraftType {
+public class Aircraft {
 	private String registration;
+	private String icao;
+	private int length;
+	private int width;
+	private int height;
+	private int emptyWeight;
+	private int maxWeight;
+	private WeightClass weightClass;
+	private int maxFuel;
+	private int fuelPerHour;
+	private int maintenanceInterval;
 	private Date bought;
 	private int flightHours;
-	private boolean winglets;
-	private boolean sharklets;
-	private int engines;
 	private String location;
-
-	public Aircraft(String icao, int length, int span, int height, int emptyWeight, int maxWeight, WeightClass weightClass, int maxFuel, int fuelPerHour, int maintenanceInterval) {
-		super(icao, length, span, height, emptyWeight, maxWeight, weightClass, maxFuel, fuelPerHour, maintenanceInterval);
-	}
+	private int minPilots;
 }

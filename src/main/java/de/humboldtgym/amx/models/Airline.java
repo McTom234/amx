@@ -1,7 +1,6 @@
 package de.humboldtgym.amx.models;
 
 import de.humboldtgym.amx.models.aircraft.Aircraft;
-import de.humboldtgym.amx.models.aircraft.AircraftType;
 import de.humboldtgym.amx.models.bookings.Customer;
 import de.humboldtgym.amx.models.flight.Flight;
 import de.humboldtgym.amx.models.flight.Route;
@@ -20,7 +19,6 @@ public class Airline {
     private int weightCargoB;
     private int weightCargoC;
 
-    private ArrayList<AircraftType> aircraftTypes;
     private ArrayList<Aircraft> fleet;
     private ArrayList<Route> routes;
     private ArrayList<Flight> flights;
