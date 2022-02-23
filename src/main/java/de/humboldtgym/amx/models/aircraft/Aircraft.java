@@ -1,10 +1,11 @@
 package de.humboldtgym.amx.models.aircraft;
 
 import de.humboldtgym.amx.models.enums.WeightClass;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.Date;
 
-public class Aircraft {
+public abstract class Aircraft {
 	private String registration;
 	private String icao;
 	private int length;
@@ -16,10 +17,46 @@ public class Aircraft {
 	private int maxFuel;
 	private int fuelPerHour;
 	private int maintenanceInterval;
+	private int timeToNextMaintenance;
 	private Date bought;
 	private int flightHours;
 	private String location;
 	private int minPilots;
+
+	public boolean requireMaintenance() {
+		if (timeToNextMaintenance > maintenanceInterval) {
+			LogManager.getLogger().error(String.format("Next maintenance for %s must not be later than maximum maintenance interval.", getRegistration()));
+			return true;
+		}
+		if (timeToNextMaintenance <= 0) {
+			LogManager.getLogger().error(String.format("%s must be maintained.", getRegistration()));
+			return true;
+		}
+		return false;
+	}
+
+	public void fly(String dest) {
+		if (!checkFlightData(dest)) return;
+		this.location = dest;
+		addFlightHours(0); // TODO add flight time API
+		startEngines();
+	}
+
+	public boolean checkFlightData(String dest) {
+		if (requireMaintenance()) {
+			LogManager.getLogger().error(String.format("%s cannot depart. Aircraft needs maintenance.", getRegistration()));
+			return false;
+		}
+		int flightTime = 0;
+		double maxFlightTime = getMaxFuel() / getFuelPerHour();
+		if (0 > maxFlightTime) { // TODO add flight time API
+			LogManager.getLogger().error(String.format("%s cannot depart. The aircraft cannot fly that long. Your selected Route has a flight time of %d hours. The aircraft can fly for a maximum time of %f hours.", getRegistration(), flightTime, maxFlightTime));
+			return false;
+		}
+		return true;
+	};
+
+	public abstract void startEngines();
 
 	public String getRegistration() {
 		return registration;
@@ -121,6 +158,11 @@ public class Aircraft {
 		return flightHours;
 	}
 
+	public void addFlightHours(int hours) {
+		this.flightHours += hours;
+		this.timeToNextMaintenance += hours;
+	}
+
 	public void setFlightHours(int flightHours) {
 		this.flightHours = flightHours;
 	}
@@ -139,5 +181,17 @@ public class Aircraft {
 
 	public void setMinPilots(int minPilots) {
 		this.minPilots = minPilots;
+	}
+
+	public void maintain() {
+		this.timeToNextMaintenance = this.maintenanceInterval;
+	}
+
+	public int getTimeToNextMaintenance() {
+		return timeToNextMaintenance;
+	}
+
+	public void setTimeToNextMaintenance(int timeToNextMaintenance) {
+		this.timeToNextMaintenance = timeToNextMaintenance;
 	}
 }
