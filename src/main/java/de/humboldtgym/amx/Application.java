@@ -1,6 +1,7 @@
 package de.humboldtgym.amx;
 
 import de.humboldtgym.amx.gui.MainWindow;
+import de.humboldtgym.amx.io.AirportManager;
 import de.humboldtgym.amx.io.DataManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,14 +20,18 @@ public class Application {
     private final MainWindow window;
     private final Logger logger;
     private final DataManager dataManager;
+    private final AirportManager airportManager;
 
     private Application() {
         this.window = new MainWindow();
         this.logger = LogManager.getLogger();
         this.dataManager = new DataManager();
+        this.airportManager = new AirportManager();
     }
 
     public void run() {
+        this.airportManager.loadData();
+
         this.window.reloadContent();
         this.window.setVisible(true);
     }
