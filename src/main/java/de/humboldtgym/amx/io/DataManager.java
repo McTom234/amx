@@ -42,6 +42,10 @@ public class DataManager {
         }
     }
 
+    public void unloadSet() {
+        this.loadedSet = null;
+    }
+
     public void newSet() {
         this.loadedSet = new DataSet();
     }

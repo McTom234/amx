@@ -1,5 +1,7 @@
 package de.humboldtgym.amx.aux;
 
+import javax.swing.*;
+
 public final class Util {
     private static final double EARTH_RADIUS_KM = 6371.0;
 
@@ -21,5 +23,11 @@ public final class Util {
 
         var c = 2.0 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return EARTH_RADIUS_KM * c;
+    }
+
+    public static JMenuItem runnableItem(String label, Runnable action) {
+        var item = new JMenuItem(label);
+        item.addActionListener((e) -> action.run());
+        return item;
     }
 }
