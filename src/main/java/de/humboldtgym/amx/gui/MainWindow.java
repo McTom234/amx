@@ -1,7 +1,7 @@
 package de.humboldtgym.amx.gui;
 
 import de.humboldtgym.amx.Application;
-import de.humboldtgym.amx.aux.Util;
+import de.humboldtgym.amx.auxiliary.Util;
 import de.humboldtgym.amx.gui.events.ReloadContentEvent;
 
 import javax.swing.*;

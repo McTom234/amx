@@ -1,4 +1,4 @@
-package de.humboldtgym.amx.aux;
+package de.humboldtgym.amx.auxiliary;
 
 import javax.swing.*;
 
