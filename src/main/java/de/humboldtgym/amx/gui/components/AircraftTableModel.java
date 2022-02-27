@@ -79,4 +79,9 @@ public class AircraftTableModel extends AbstractTableModel {
     public int getColumnCount() {
         return 6;
     }
+
+    public void removeRow(int row) {
+        this.availableAircraft.remove(row);
+        fireTableRowsDeleted(row, row);
+    }
 }

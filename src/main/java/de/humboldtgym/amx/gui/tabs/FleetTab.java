@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class FleetTab extends JPanel {
     private final AircraftTable table;
     private final JButton editButton;
+    private final JButton deleteButton;
 
     public FleetTab() {
         setLayout(new BorderLayout());
@@ -38,7 +39,6 @@ public class FleetTab extends JPanel {
         buttonPanel.add(Box.createHorizontalGlue());
 
         editButton = new JButton("Edit");
-        editButton.setAlignmentX(JButton.RIGHT_ALIGNMENT);
         editButton.addActionListener((e) -> onEdit());
         editButton.setEnabled(table.getSelectedRow() != -1);
         buttonPanel.add(editButton);
@@ -46,8 +46,14 @@ public class FleetTab extends JPanel {
         buttonPanel.add(Box.createHorizontalStrut(5));
 
         var addButton = new JButton("Add");
-        addButton.setAlignmentX(JButton.RIGHT_ALIGNMENT);
         buttonPanel.add(addButton);
+
+        buttonPanel.add(Box.createHorizontalStrut(5));
+
+        deleteButton = new JButton("Delete");
+        deleteButton.addActionListener((e) -> onDelete());
+        deleteButton.setEnabled(table.getSelectedRow() != -1);
+        buttonPanel.add(deleteButton);
 
         add(buttonPanel, BorderLayout.SOUTH);
     }
@@ -56,6 +62,7 @@ public class FleetTab extends JPanel {
         int selectedRow = table.getSelectedRow();
 
         editButton.setEnabled(selectedRow != -1);
+        deleteButton.setEnabled(selectedRow != -1);
     }
 
     private void onClicked(MouseEvent e) {
@@ -66,5 +73,19 @@ public class FleetTab extends JPanel {
 
     private void onEdit() {
 
+    }
+
+    private void onDelete() {
+        int option = JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure you want to remove this Aircraft?",
+                "Remove aircraft",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if(option == JOptionPane.YES_OPTION) {
+            table.getModel().removeRow(table.getSelectedRow());
+        }
     }
 }

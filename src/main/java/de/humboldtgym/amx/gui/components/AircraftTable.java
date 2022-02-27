@@ -12,4 +12,9 @@ public class AircraftTable extends JTable {
         this.model = new AircraftTableModel(aircraft);
         setModel(model);
     }
+
+    @Override
+    public AircraftTableModel getModel() {
+        return model;
+    }
 }
