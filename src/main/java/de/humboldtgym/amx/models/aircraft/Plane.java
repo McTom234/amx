@@ -2,7 +2,10 @@ package de.humboldtgym.amx.models.aircraft;
 
 import de.humboldtgym.amx.Application;
 import de.humboldtgym.amx.models.Airline;
+import de.humboldtgym.amx.models.enums.WeightClass;
 import org.apache.logging.log4j.LogManager;
+
+import java.util.Date;
 
 public abstract class Plane extends Aircraft {
 	private int minRunwayLength;
@@ -10,6 +13,55 @@ public abstract class Plane extends Aircraft {
 	private boolean winglets;
 	private boolean sharklets;
 	private int engines;
+
+	public Plane(
+			String registration,
+			String icao,
+			double length,
+			double width,
+			double height,
+			int flightSpeedPerHour,
+			int emptyWeight,
+			int maxWeight,
+			WeightClass weightClass,
+			int maxFuel,
+			double fuelPerHour,
+			int maintenanceInterval,
+			double timeToNextMaintenance,
+			Date bought,
+			double flightHours,
+			String location,
+			int minPilots,
+			int minRunwayLength,
+			double wingSpan,
+			boolean winglets,
+			boolean sharklets,
+			int engines
+	) {
+		super(
+				registration,
+				icao,
+				length,
+				width,
+				height,
+				flightSpeedPerHour,
+				emptyWeight,
+				maxWeight,
+				weightClass,
+				maxFuel, fuelPerHour,
+				maintenanceInterval,
+				timeToNextMaintenance,
+				bought,
+				flightHours,
+				location,
+				minPilots
+		);
+		this.minRunwayLength = minRunwayLength;
+		this.wingSpan = wingSpan;
+		this.winglets = winglets;
+		this.sharklets = sharklets;
+		this.engines = engines;
+	}
 
 	@Override
 	public boolean checkFlightDataForErrors(String dest) {

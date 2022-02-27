@@ -1,8 +1,11 @@
 package de.humboldtgym.amx.models.aircraft;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.humboldtgym.amx.models.Airline;
+import de.humboldtgym.amx.models.enums.WeightClass;
 import org.apache.logging.log4j.LogManager;
 
+import java.util.Date;
 import java.util.Random;
 
 public class CargoPlane extends Plane {
@@ -12,6 +15,68 @@ public class CargoPlane extends Plane {
 	private boolean frontHatch;
 	private boolean sideHatch;
 	private boolean backHatch;
+
+	public CargoPlane(
+			@JsonProperty(required = true, value = "registration") String registration,
+			@JsonProperty(required = true, value = "icao") String icao,
+			@JsonProperty(required = true, value = "length") double length,
+			@JsonProperty(required = true, value = "width") double width,
+			@JsonProperty(required = true, value = "height") double height,
+			@JsonProperty(required = true, value = "flightSpeedPerHour") int flightSpeedPerHour,
+			@JsonProperty(required = true, value = "emptyWeight") int emptyWeight,
+			@JsonProperty(required = true, value = "maxWeight") int maxWeight,
+			@JsonProperty(required = true, value = "weightClass") WeightClass weightClass,
+			@JsonProperty(required = true, value = "maxFuel") int maxFuel,
+			@JsonProperty(required = true, value = "fuelPerHour") double fuelPerHour,
+			@JsonProperty(required = true, value = "maintenanceInterval") int maintenanceInterval,
+			@JsonProperty(required = true, value = "timeToNextMaintenance") double timeToNextMaintenance,
+			@JsonProperty(required = true, value = "bought") Date bought,
+			@JsonProperty(required = true, value = "flightHours") double flightHours,
+			@JsonProperty(required = true, value = "location") String location,
+			@JsonProperty(required = true, value = "minPilots") int minPilots,
+			@JsonProperty(required = true, value = "minRunwayLength") int minRunwayLength,
+			@JsonProperty(required = true, value = "wingSpan") double wingSpan,
+			@JsonProperty(required = true, value = "winglets") boolean winglets,
+			@JsonProperty(required = true, value = "sharklets") boolean sharklets,
+			@JsonProperty(required = true, value = "engines") int engines,
+			@JsonProperty(required = true, value = "maxCargoA") int maxCargoA,
+			@JsonProperty(required = true, value = "maxCargoB") int maxCargoB,
+			@JsonProperty(required = true, value = "maxCargoC") int maxCargoC,
+			@JsonProperty(required = true, value = "frontHatch") boolean frontHatch,
+			@JsonProperty(required = true, value = "sideHatch") boolean sideHatch,
+			@JsonProperty(required = true, value = "backHatch") boolean backHatch
+	) {
+		super(
+				registration,
+				icao,
+				length,
+				width,
+				height,
+				flightSpeedPerHour,
+				emptyWeight,
+				maxWeight,
+				weightClass,
+				maxFuel,
+				fuelPerHour,
+				maintenanceInterval,
+				timeToNextMaintenance,
+				bought,
+				flightHours,
+				location,
+				minPilots,
+				minRunwayLength,
+				wingSpan,
+				winglets,
+				sharklets,
+				engines
+		);
+		this.maxCargoA = maxCargoA;
+		this.maxCargoB = maxCargoB;
+		this.maxCargoC = maxCargoC;
+		this.frontHatch = frontHatch;
+		this.sideHatch = sideHatch;
+		this.backHatch = backHatch;
+	}
 
 	@Override
 	public void boarding(Airline airline) {
@@ -33,6 +98,7 @@ public class CargoPlane extends Plane {
 		LogManager.getLogger().info(String.format("Loaded %d type A cargo boxes, %d type B cargo boxes and %d type C cargo boxes to %s. Boarding completed.", cargoA, cargoB, cargoC, getRegistration()));
 	}
 
+	@JsonProperty
 	public int getMaxCargoA() {
 		return maxCargoA;
 	}
@@ -41,6 +107,7 @@ public class CargoPlane extends Plane {
 		this.maxCargoA = maxCargoA;
 	}
 
+	@JsonProperty
 	public int getMaxCargoB() {
 		return maxCargoB;
 	}
@@ -49,6 +116,7 @@ public class CargoPlane extends Plane {
 		this.maxCargoB = maxCargoB;
 	}
 
+	@JsonProperty
 	public int getMaxCargoC() {
 		return maxCargoC;
 	}
@@ -57,6 +125,7 @@ public class CargoPlane extends Plane {
 		this.maxCargoC = maxCargoC;
 	}
 
+	@JsonProperty
 	public boolean isFrontHatch() {
 		return frontHatch;
 	}
@@ -65,6 +134,7 @@ public class CargoPlane extends Plane {
 		this.frontHatch = frontHatch;
 	}
 
+	@JsonProperty
 	public boolean isSideHatch() {
 		return sideHatch;
 	}
@@ -73,6 +143,7 @@ public class CargoPlane extends Plane {
 		this.sideHatch = sideHatch;
 	}
 
+	@JsonProperty
 	public boolean isBackHatch() {
 		return backHatch;
 	}
