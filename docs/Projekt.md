@@ -16,6 +16,24 @@ Daten. Weiter lassen sich Flugzeuge Routen zuweisen und somit Flüge planen.
 Unterstützt werden diese Operationen durch die Programmoberfläche, welche eine
 interaktive Eingabe bietet.
 
+## Vollständigkeit
+Datenstrukturen und Funktionen für das Laden und Speichern des Datensatzes sowie die
+grafische Oberfläche sind implementiert. Zusätzlich können Flugzeuge und Helikopter
+bereits über die Oberfläche verwaltet werden.
+
+Eigenschaften und Daten in den jeweiligen Klassen sind exemplarisch für ihre echten
+Vorbilder. Zusätzlich werden Eingabedaten grob auf ihre Sinnhaftigkeit geprüft.
+
+Das Verwalten von Routen, Personen und Flügen ist bis jetzt noch nicht implementiert,
+die Grundstruktur ist aber vorhanden.
+
+Als vollständig und funktionsfähig werden alle Klassen in
+`de.humboldtgym.amx.models.aircraft` sowie die Klasse 
+`de.humboldtgym.amx.models.Airline` eingestuft. Ein 
+[exportiertes UML Diagramm](./models.svg) dieser
+Klassenstrukturen befindet sich neben dieser Datei als `models.svg`. 
+Nicht finalisierte Klassen und Pakete sind eingeklappt und nicht vollständig angegeben.
+
 ## Datenstrukturen
 ### Flugzeuge
 Flugzeuge werden von Herstellern entwickelt und haben in ihrer Zulassung bestimmte
