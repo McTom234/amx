@@ -1,6 +1,8 @@
 package de.humboldtgym.amx.models.aircraft;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import de.humboldtgym.amx.Application;
 import de.humboldtgym.amx.auxiliary.Util;
 import de.humboldtgym.amx.models.Airline;
@@ -9,6 +11,15 @@ import org.apache.logging.log4j.LogManager;
 
 import java.util.Date;
 
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.CLASS
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = PassengerPlane.class),
+        @JsonSubTypes.Type(value = CargoPlane.class),
+        @JsonSubTypes.Type(value = PassengerHelicopter.class),
+        @JsonSubTypes.Type(value = CargoHelicopter.class),
+})
 public abstract class Aircraft {
     private String registration;
     private String icao;
