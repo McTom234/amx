@@ -4,7 +4,6 @@ import de.humboldtgym.amx.models.aircraft.Aircraft;
 import de.humboldtgym.amx.models.aircraft.PassengerPlane;
 import de.humboldtgym.amx.models.enums.WeightClass;
 
-import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.Date;
 import java.util.List;
