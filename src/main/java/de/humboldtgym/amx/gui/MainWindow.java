@@ -1,5 +1,9 @@
 package de.humboldtgym.amx.gui;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import de.humboldtgym.amx.Application;
 import de.humboldtgym.amx.auxiliary.Util;
 import de.humboldtgym.amx.exceptions.DataException;
@@ -21,6 +25,10 @@ public class MainWindow extends JFrame {
 
     public void reloadContent(boolean freshData) {
         var loadedSet = Application.getInstance().getDataManager().getLoadedSet();
+        if(loadedSet != null && freshData) {
+            this.showAirlineEditDialog(true);
+            loadedSet = Application.getInstance().getDataManager().getLoadedSet(); // may have been cancelled
+        }
 
         var menuBar = new JMenuBar();
 
@@ -32,8 +40,14 @@ public class MainWindow extends JFrame {
         var extrasMenu = new JMenu("Extras");
         menuBar.add(extrasMenu);
 
-        var themeMnu = new JMenu("Theme");
-        extrasMenu.add(themeMnu);
+        var themeMenu = new JMenu("Theme");
+        extrasMenu.add(themeMenu);
+
+        themeMenu.add(Util.runnableItem("Light", () -> Util.updateLAF(this, new FlatLightLaf())));
+        themeMenu.add(Util.runnableItem("Dark", () -> Util.updateLAF(this, new FlatDarkLaf())));
+        themeMenu.add(Util.runnableItem("Darcula", () -> Util.updateLAF(this, new FlatDarculaLaf())));
+        themeMenu.add(Util.runnableItem("IntelliJ", () -> Util.updateLAF(this, new FlatIntelliJLaf())));
+        themeMenu.add(Util.runnableItem("Native", () -> Util.updateLAF(this, UIManager.getSystemLookAndFeelClassName())));
 
         if(loadedSet != null) {
             setContentPane(new DataContentView());
@@ -44,10 +58,6 @@ public class MainWindow extends JFrame {
 
             var dataMenu = new JMenu("Data");
             menuBar.add(dataMenu);
-
-            if(freshData) {
-                this.showAirlineEditDialog(true);
-            }
 
             dataMenu.add(Util.runnableItem("Edit airline", () -> this.showAirlineEditDialog(false)));
         } else {

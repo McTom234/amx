@@ -1,8 +1,13 @@
 package de.humboldtgym.amx.auxiliary;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.swing.*;
+import java.awt.*;
 
 public final class Util {
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final double EARTH_RADIUS_KM = 6371.0;
 
     private Util() {
@@ -37,5 +42,23 @@ public final class Util {
         var item = new JMenuItem(label);
         item.addActionListener((e) -> action.run());
         return item;
+    }
+
+    public static void updateLAF(Component origin, String laf) {
+        try {
+            UIManager.setLookAndFeel(laf);
+            SwingUtilities.updateComponentTreeUI(SwingUtilities.getRoot(origin));
+        } catch(Exception e) {
+            LOGGER.warn("Failed to change look and feel:", e);
+        }
+    }
+
+    public static void updateLAF(Component origin, LookAndFeel laf) {
+        try {
+            UIManager.setLookAndFeel(laf);
+            SwingUtilities.updateComponentTreeUI(SwingUtilities.getRoot(origin));
+        } catch(Exception e) {
+            LOGGER.warn("Failed to change look and feel:", e);
+        }
     }
 }
