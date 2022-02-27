@@ -33,7 +33,14 @@ public class DataManager {
     }
 
     public void saveDataSet(Path jsonOutput) throws DataException {
-        // TODO: Parent paths?
+        Path parent = jsonOutput.getParent();
+        if(parent != null && !Files.isDirectory(parent)) {
+            try {
+                Files.createDirectories(parent);
+            } catch (IOException e) {
+                throw new DataException("Failed to create parent directories for saving", e);
+            }
+        }
 
         try (OutputStream out = Files.newOutputStream(jsonOutput)) {
             this.writer.writeValue(out, this.loadedSet);
