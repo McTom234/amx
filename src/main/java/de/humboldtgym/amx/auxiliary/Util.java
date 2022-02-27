@@ -25,6 +25,14 @@ public final class Util {
         return EARTH_RADIUS_KM * c;
     }
 
+    public static double convertDistanceKMToNM(double distanceKM) {
+        return distanceKM * 0.54;
+    }
+
+    public static double convertDistanceNMToKM(double distanceNM) {
+        return distanceNM * 1.852;
+    }
+
     public static JMenuItem runnableItem(String label, Runnable action) {
         var item = new JMenuItem(label);
         item.addActionListener((e) -> action.run());

@@ -1,6 +1,5 @@
 package de.humboldtgym.amx;
 
-import de.humboldtgym.amx.exceptions.InvalidDataException;
 import de.humboldtgym.amx.gui.MainWindow;
 import de.humboldtgym.amx.io.AirportManager;
 import de.humboldtgym.amx.io.DataManager;
@@ -43,5 +42,9 @@ public class Application {
 
     public DataManager getDataManager() {
         return dataManager;
+    }
+
+    public AirportManager getAirportManager() {
+        return airportManager;
     }
 }
