@@ -1,6 +1,7 @@
 package de.humboldtgym.amx.gui;
 
 import de.humboldtgym.amx.Application;
+import de.humboldtgym.amx.gui.components.InlineColorChooser;
 import de.humboldtgym.amx.gui.validtor.DoubleValidator;
 import de.humboldtgym.amx.gui.validtor.NameValidator;
 import de.humboldtgym.amx.gui.validtor.ValidationBatch;
@@ -10,13 +11,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Objects;
 
 public class EditAirlineDialog extends JDialog {
     private final Runnable cancelCallback;
 
     private final NameValidator name;
-    private Color primaryColor;
-    private Color secondaryColor;
+    private final InlineColorChooser primaryColor;
+    private final InlineColorChooser secondaryColor;
     private final DoubleValidator weightPerPassenger;
     private final DoubleValidator weightA;
     private final DoubleValidator weightB;
@@ -34,6 +36,8 @@ public class EditAirlineDialog extends JDialog {
         var weightCField = new JTextField(Double.toString(data.getWeightCargoC()));
 
         this.name = new NameValidator(nameField);
+        this.primaryColor = new InlineColorChooser(new Color(data.getPrimaryColor()));
+        this.secondaryColor = new InlineColorChooser(new Color(data.getSecondaryColor()));
         this.weightPerPassenger = new DoubleValidator(weightPerPassengerField, 10);
         this.weightA = new DoubleValidator(weightAField, 10);
         this.weightB = new DoubleValidator(weightBField, 10);
@@ -58,8 +62,8 @@ public class EditAirlineDialog extends JDialog {
         weightsPanel.add(weightCField);
 
         line(0, new JLabel("Name"), nameField);
-        line(1, new JLabel("Primary color"), new JButton("..."));
-        line(2, new JLabel("Secondary color"), new JButton("..."));
+        line(1, new JLabel("Primary color"), primaryColor);
+        line(2, new JLabel("Secondary color"), secondaryColor);
         line(3, new JLabel("Weight per passenger"), weightPerPassengerField);
         line(4, new JLabel("Cargo weights"), weightsPanel);
 
@@ -111,6 +115,10 @@ public class EditAirlineDialog extends JDialog {
     }
 
     private void cancel(ActionEvent e) {
+        if(this.cancelCallback != null) {
+            this.cancelCallback.run();
+        }
+
         this.dispose();
     }
 
@@ -126,7 +134,18 @@ public class EditAirlineDialog extends JDialog {
             return;
         }
 
-        // TODO: Write values
+        var primaryColor = this.primaryColor.getColor();
+        var secondaryColor = this.secondaryColor.getColor();
+
+        var data = Application.getInstance().getDataManager().getLoadedSet().getAirline();
+
+        data.setName(name);
+        data.setPrimaryColor(primaryColor.getRGB());
+        data.setSecondaryColor(secondaryColor.getRGB());
+        data.setWeightPerPassenger(Objects.requireNonNull(weightPerPassenger));
+        data.setWeightCargoA(Objects.requireNonNull(weightA));
+        data.setWeightCargoB(Objects.requireNonNull(weightB));
+        data.setWeightCargoC(Objects.requireNonNull(weightC));
 
         this.dispose();
     }
