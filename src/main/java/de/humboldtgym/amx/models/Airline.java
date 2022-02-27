@@ -52,18 +52,18 @@ public class Airline {
 
     @JsonCreator
     public Airline(
-            @JsonProperty("name") String name,
-            @JsonProperty("primaryColor") int primaryColor,
-            @JsonProperty("secondaryColor") int secondaryColor,
-            @JsonProperty("weightPerPassenger") double weightPerPassenger,
-            @JsonProperty("weightCargoA") double weightCargoA,
-            @JsonProperty("weightCargoC") double weightCargoC,
-            @JsonProperty("weightCargoB") double weightCargoB,
-            @JsonProperty("fleet") List<Aircraft> fleet,
-            @JsonProperty("routes") List<Route> routes,
-            @JsonProperty("flights") List<Flight> flights,
-            @JsonProperty("customers") List<Customer> customers,
-            @JsonProperty("employees") List<Employee> employees
+            @JsonProperty(required = true, value = "name") String name,
+            @JsonProperty(required = true, value = "primaryColor") int primaryColor,
+            @JsonProperty(required = true, value = "secondaryColor") int secondaryColor,
+            @JsonProperty(required = true, value = "weightPerPassenger") double weightPerPassenger,
+            @JsonProperty(required = true, value = "weightCargoA") double weightCargoA,
+            @JsonProperty(required = true, value = "weightCargoC") double weightCargoC,
+            @JsonProperty(required = true, value = "weightCargoB") double weightCargoB,
+            @JsonProperty(required = true, value = "fleet") List<Aircraft> fleet,
+            @JsonProperty(required = true, value = "routes") List<Route> routes,
+            @JsonProperty(required = true, value = "flights") List<Flight> flights,
+            @JsonProperty(required = true, value = "customers") List<Customer> customers,
+            @JsonProperty(required = true, value = "employees") List<Employee> employees
     ) {
         this.name = name;
         this.primaryColor = primaryColor;

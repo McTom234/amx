@@ -1,7 +1,7 @@
 package de.humboldtgym.amx.gui;
 
 import de.humboldtgym.amx.Application;
-import de.humboldtgym.amx.gui.validtor.IntValidator;
+import de.humboldtgym.amx.gui.validtor.DoubleValidator;
 import de.humboldtgym.amx.gui.validtor.NameValidator;
 import de.humboldtgym.amx.gui.validtor.ValidationBatch;
 
@@ -17,25 +17,27 @@ public class EditAirlineDialog extends JDialog {
     private final NameValidator name;
     private Color primaryColor;
     private Color secondaryColor;
-    private final IntValidator weightPerPassenger;
-    private final IntValidator weightA;
-    private final IntValidator weightB;
-    private final IntValidator weightC;
+    private final DoubleValidator weightPerPassenger;
+    private final DoubleValidator weightA;
+    private final DoubleValidator weightB;
+    private final DoubleValidator weightC;
 
     /* package */ EditAirlineDialog(Runnable cancelCallback) {
         this.cancelCallback = cancelCallback;
 
-        var nameField = new JTextField();
-        var weightPerPassengerField = new JTextField();
-        var weightAField = new JTextField();
-        var weightBField = new JTextField();
-        var weightCField = new JTextField();
+        var data = Application.getInstance().getDataManager().getLoadedSet().getAirline();
+
+        var nameField = new JTextField(data.getName());
+        var weightPerPassengerField = new JTextField(Double.toString(data.getWeightPerPassenger()));
+        var weightAField = new JTextField(Double.toString(data.getWeightCargoA()));
+        var weightBField = new JTextField(Double.toString(data.getWeightCargoB()));
+        var weightCField = new JTextField(Double.toString(data.getWeightCargoC()));
 
         this.name = new NameValidator(nameField);
-        this.weightPerPassenger = new IntValidator(weightPerPassengerField, 10);
-        this.weightA = new IntValidator(weightAField, 10);
-        this.weightB = new IntValidator(weightBField, 10);
-        this.weightC = new IntValidator(weightCField, 10);
+        this.weightPerPassenger = new DoubleValidator(weightPerPassengerField, 10);
+        this.weightA = new DoubleValidator(weightAField, 10);
+        this.weightB = new DoubleValidator(weightBField, 10);
+        this.weightC = new DoubleValidator(weightCField, 10);
 
         setTitle("Edit airline");
         setModal(true);
