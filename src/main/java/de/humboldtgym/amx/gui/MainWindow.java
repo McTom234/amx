@@ -16,7 +16,7 @@ public class MainWindow extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    public void reloadContent() {
+    public void reloadContent(boolean freshData) {
         var loadedSet = Application.getInstance().getDataManager().getLoadedSet();
 
         var menuBar = new JMenuBar();
@@ -31,14 +31,18 @@ public class MainWindow extends JFrame {
 
             fileMenu.add(Util.runnableItem("Unload data", () -> {
                 Application.getInstance().getDataManager().unloadSet();
-                reloadContent();
+                reloadContent(false);
             }));
 
 
             var dataMenu = new JMenu("Data");
             menuBar.add(dataMenu);
 
-            dataMenu.add(Util.runnableItem("Edit airline", this::showAirlineEditDialog));
+            if(freshData) {
+                this.showAirlineEditDialog(true);
+            }
+
+            dataMenu.add(Util.runnableItem("Edit airline", () -> this.showAirlineEditDialog(false)));
         } else {
             setContentPane(new LoadContentView());
         }
@@ -50,16 +54,22 @@ public class MainWindow extends JFrame {
     @Override
     protected void processEvent(AWTEvent e) {
         Application.getInstance().getLogger().debug("Processing event {}", e);
-        if(e instanceof ReloadContentEvent) {
-            reloadContent();
+        if(e instanceof ReloadContentEvent reloadEvent) {
+            reloadContent(reloadEvent.isFreshData());
             return;
         }
 
         super.processEvent(e);
     }
 
-    private void showAirlineEditDialog() {
-        var dialog = new EditAirlineDialog();
+    private void showAirlineEditDialog(boolean initialSetup) {
+        var dialog = new EditAirlineDialog(initialSetup ? this::unloadData : null);
+        dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
+    }
+
+    private void unloadData() {
+        Application.getInstance().getDataManager().unloadSet();
+        reloadContent(false);
     }
 }

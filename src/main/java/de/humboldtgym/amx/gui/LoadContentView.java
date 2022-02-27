@@ -52,7 +52,7 @@ public class LoadContentView extends JPanel {
 
             try {
                 Application.getInstance().getDataManager().loadDataSet(selected.toPath());
-                SwingUtilities.getRoot(this).dispatchEvent(new ReloadContentEvent(this));
+                SwingUtilities.getRoot(this).dispatchEvent(new ReloadContentEvent(this, false));
             } catch (DataException e) {
                 JOptionPane.showMessageDialog(
                         this,
@@ -66,6 +66,6 @@ public class LoadContentView extends JPanel {
 
     private void createCallback(ActionEvent e) {
         Application.getInstance().getDataManager().newSet();
-        SwingUtilities.getRoot(this).dispatchEvent(new ReloadContentEvent(this));
+        SwingUtilities.getRoot(this).dispatchEvent(new ReloadContentEvent(this, true));
     }
 }

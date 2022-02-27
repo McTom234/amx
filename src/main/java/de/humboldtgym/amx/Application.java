@@ -32,7 +32,7 @@ public class Application {
     public void run() {
         this.airportManager.loadData();
 
-        this.window.reloadContent();
+        this.window.reloadContent(false);
         this.window.setVisible(true);
     }
 
