@@ -1,4 +1,4 @@
-package de.humboldtgym.amx.gui.validtor;
+package de.humboldtgym.amx.gui.validator;
 
 import javax.swing.*;
 import javax.swing.border.Border;

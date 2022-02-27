@@ -1,4 +1,4 @@
-package de.humboldtgym.amx.gui.validtor;
+package de.humboldtgym.amx.gui.validator;
 
 public class InputValidationException extends Exception {
     public InputValidationException(String message) {

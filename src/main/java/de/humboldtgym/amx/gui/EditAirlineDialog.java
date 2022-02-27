@@ -3,9 +3,9 @@ package de.humboldtgym.amx.gui;
 import de.humboldtgym.amx.Application;
 import de.humboldtgym.amx.auxiliary.Util;
 import de.humboldtgym.amx.gui.components.InlineColorChooser;
-import de.humboldtgym.amx.gui.validtor.DoubleValidator;
-import de.humboldtgym.amx.gui.validtor.NameValidator;
-import de.humboldtgym.amx.gui.validtor.ValidationBatch;
+import de.humboldtgym.amx.gui.validator.DoubleValidator;
+import de.humboldtgym.amx.gui.validator.NameValidator;
+import de.humboldtgym.amx.gui.validator.ValidationBatch;
 
 import javax.swing.*;
 import java.awt.*;
