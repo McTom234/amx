@@ -155,7 +155,7 @@ public class EditAircraftDialog extends JDialog {
             line(15, new JLabel("Rotor count"), rotorsField);
             line(17, new JLabel("Rotor span"), rotorSpanField);
 
-            nextLine = 17;
+            nextLine = 18;
         } else {
             this.rotors = null;
             this.rotorSpan = null;
