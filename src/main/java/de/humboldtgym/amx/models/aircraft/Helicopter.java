@@ -2,7 +2,7 @@ package de.humboldtgym.amx.models.aircraft;
 
 import org.apache.logging.log4j.LogManager;
 
-public class Helicopter extends Aircraft {
+public abstract class Helicopter extends Aircraft {
 	private int rotors;
 	private double rotorSpan;
 

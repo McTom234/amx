@@ -1,5 +1,10 @@
 package de.humboldtgym.amx.models.aircraft;
 
+import de.humboldtgym.amx.models.Airline;
+import org.apache.logging.log4j.LogManager;
+
+import java.util.Random;
+
 public class CargoPlane extends Plane {
 	private int maxCargoA;
 	private int maxCargoB;
@@ -7,6 +12,26 @@ public class CargoPlane extends Plane {
 	private boolean frontHatch;
 	private boolean sideHatch;
 	private boolean backHatch;
+
+	@Override
+	public void boarding(Airline airline) {
+		LogManager.getLogger().info(String.format("Opening hatches and preparing stand of aircraft %s at Airport %s...", getLocation(), getRegistration()));
+		LogManager.getLogger().info(String.format("Starting loading %s...", getRegistration()));
+		int cargoA = 1;
+		int cargoB = 1;
+		int cargoC = 1;
+		Random random = new Random();
+		do {
+			if (cargoA == 0 && cargoB == 0 && cargoC == 0) {
+				LogManager.getLogger().error(String.format("Cannot load any cargo to %s. The maximum weight is probably exceeded. Double check before departure!", getRegistration()));
+				continue;
+			}
+			cargoA = random.nextInt(getMaxCargoA()+1);
+			cargoB = random.nextInt(getMaxCargoB()+1);
+			cargoC = random.nextInt(getMaxCargoC()+1);
+		} while ((cargoA * airline.getWeightCargoA() + cargoB * airline.getWeightCargoB() + cargoC * airline.getWeightCargoC()) <= getMaxWeight());
+		LogManager.getLogger().info(String.format("Loaded %d type A cargo boxes, %d type B cargo boxes and %d type C cargo boxes to %s. Boarding completed.", cargoA, cargoB, cargoC, getRegistration()));
+	}
 
 	public int getMaxCargoA() {
 		return maxCargoA;
