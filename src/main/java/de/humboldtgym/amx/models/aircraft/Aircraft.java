@@ -8,18 +8,18 @@ import java.util.Date;
 public abstract class Aircraft {
 	private String registration;
 	private String icao;
-	private int length;
-	private int width;
-	private int height;
+	private double length;
+	private double width;
+	private double height;
 	private int emptyWeight;
 	private int maxWeight;
 	private WeightClass weightClass;
 	private int maxFuel;
-	private int fuelPerHour;
+	private double fuelPerHour;
 	private int maintenanceInterval;
-	private int timeToNextMaintenance;
+	private double timeToNextMaintenance;
 	private Date bought;
-	private int flightHours;
+	private double flightHours;
 	private String location;
 	private int minPilots;
 
@@ -74,27 +74,27 @@ public abstract class Aircraft {
 		this.icao = icao;
 	}
 
-	public int getLength() {
+	public double getLength() {
 		return length;
 	}
 
-	public void setLength(int length) {
+	public void setLength(double length) {
 		this.length = length;
 	}
 
-	public int getWidth() {
+	public double getWidth() {
 		return width;
 	}
 
-	public void setWidth(int width) {
+	public void setWidth(double width) {
 		this.width = width;
 	}
 
-	public int getHeight() {
+	public double getHeight() {
 		return height;
 	}
 
-	public void setHeight(int height) {
+	public void setHeight(double height) {
 		this.height = height;
 	}
 
@@ -130,11 +130,11 @@ public abstract class Aircraft {
 		this.maxFuel = maxFuel;
 	}
 
-	public int getFuelPerHour() {
+	public double getFuelPerHour() {
 		return fuelPerHour;
 	}
 
-	public void setFuelPerHour(int fuelPerHour) {
+	public void setFuelPerHour(double fuelPerHour) {
 		this.fuelPerHour = fuelPerHour;
 	}
 
@@ -154,7 +154,7 @@ public abstract class Aircraft {
 		this.bought = bought;
 	}
 
-	public int getFlightHours() {
+	public double getFlightHours() {
 		return flightHours;
 	}
 
@@ -163,7 +163,7 @@ public abstract class Aircraft {
 		this.timeToNextMaintenance += hours;
 	}
 
-	public void setFlightHours(int flightHours) {
+	public void setFlightHours(double flightHours) {
 		this.flightHours = flightHours;
 	}
 
@@ -187,11 +187,11 @@ public abstract class Aircraft {
 		this.timeToNextMaintenance = this.maintenanceInterval;
 	}
 
-	public int getTimeToNextMaintenance() {
+	public double getTimeToNextMaintenance() {
 		return timeToNextMaintenance;
 	}
 
-	public void setTimeToNextMaintenance(int timeToNextMaintenance) {
+	public void setTimeToNextMaintenance(double timeToNextMaintenance) {
 		this.timeToNextMaintenance = timeToNextMaintenance;
 	}
 }

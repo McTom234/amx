@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 
 public abstract class Plane extends Aircraft {
 	private int minRunwayLength;
-	private int wingSpan;
+	private double wingSpan;
 	private boolean winglets;
 	private boolean sharklets;
 	private int engines;
@@ -24,11 +24,11 @@ public abstract class Plane extends Aircraft {
 		LogManager.getLogger().info(String.format("%s started %d engines. Consuming %d fuel per hour.", getRegistration(), getEngines(), getFuelPerHour()));
 	}
 
-	public int getWingSpan() {
+	public double getWingSpan() {
 		return wingSpan;
 	}
 
-	public void setWingSpan(int wingSpan) {
+	public void setWingSpan(double wingSpan) {
 		this.wingSpan = wingSpan;
 	}
 
