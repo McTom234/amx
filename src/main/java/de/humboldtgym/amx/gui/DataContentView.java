@@ -1,14 +1,17 @@
 package de.humboldtgym.amx.gui;
 
+import de.humboldtgym.amx.gui.tabs.FleetTab;
+import de.humboldtgym.amx.gui.tabs.ToBeDoneTab;
+
 import javax.swing.*;
 
 public class DataContentView extends JTabbedPane {
     /* package */ DataContentView() {
-        addTab("Fleet", new JLabel("Fleet editor"));
-        addTab("Flights", new ToBeDoneView());
-        addTab("Routes", new ToBeDoneView());
-        addTab("Flights", new ToBeDoneView());
-        addTab("Customers", new ToBeDoneView());
-        addTab("Employees", new ToBeDoneView());
+        addTab("Fleet", new FleetTab());
+        addTab("Flights", new ToBeDoneTab());
+        addTab("Routes", new ToBeDoneTab());
+        addTab("Flights", new ToBeDoneTab());
+        addTab("Customers", new ToBeDoneTab());
+        addTab("Employees", new ToBeDoneTab());
     }
 }
