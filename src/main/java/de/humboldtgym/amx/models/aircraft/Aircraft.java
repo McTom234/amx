@@ -222,7 +222,6 @@ public abstract class Aircraft {
         this.maxWeight = maxWeight;
     }
 
-    @JsonProperty
     public WeightClass getWeightClass() {
         return weightClass;
     }

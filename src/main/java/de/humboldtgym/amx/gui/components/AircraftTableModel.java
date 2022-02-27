@@ -1,11 +1,8 @@
 package de.humboldtgym.amx.gui.components;
 
 import de.humboldtgym.amx.models.aircraft.Aircraft;
-import de.humboldtgym.amx.models.aircraft.PassengerPlane;
-import de.humboldtgym.amx.models.enums.WeightClass;
 
 import javax.swing.table.AbstractTableModel;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -14,31 +11,6 @@ public class AircraftTableModel extends AbstractTableModel {
 
     public AircraftTableModel(List<Aircraft> availableAircraft) {
         this.availableAircraft = availableAircraft;
-        this.availableAircraft.add(new PassengerPlane(
-                "Reg",
-                "Ica",
-                120,
-                30,
-                15,
-                320,
-                1000,
-                10000,
-                WeightClass.MEDIUM,
-                120000,
-                5,
-                360,
-                32.5,
-                new Date(),
-                15232,
-                "EGLL",
-                2,
-                3100,
-                120.4,
-                true,
-                false,
-                3,
-                120
-        ));
     }
 
     @Override

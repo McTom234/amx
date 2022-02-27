@@ -1,5 +1,7 @@
 package de.humboldtgym.amx.gui.tabs;
 
+import de.humboldtgym.amx.Application;
+import de.humboldtgym.amx.gui.AircraftTypeDialog;
 import de.humboldtgym.amx.gui.EditAircraftDialog;
 import de.humboldtgym.amx.gui.components.AircraftTable;
 
@@ -8,7 +10,6 @@ import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 public class FleetTab extends JPanel {
     private final AircraftTable table;
@@ -19,8 +20,9 @@ public class FleetTab extends JPanel {
         setLayout(new BorderLayout());
 
         var scroller = new JScrollPane();
+        var data = Application.getInstance().getDataManager().getLoadedSet();
 
-        this.table = new AircraftTable(new ArrayList<>());
+        this.table = new AircraftTable(data.getAirline().getFleet());
         this.table.getSelectionModel().addListSelectionListener(this::onSelectionChanged);
         this.table.addMouseListener(new MouseAdapter() {
             @Override
@@ -47,6 +49,7 @@ public class FleetTab extends JPanel {
         buttonPanel.add(Box.createHorizontalStrut(5));
 
         var addButton = new JButton("Add");
+        addButton.addActionListener((e) -> onAdd());
         buttonPanel.add(addButton);
 
         buttonPanel.add(Box.createHorizontalStrut(5));
@@ -95,5 +98,11 @@ public class FleetTab extends JPanel {
         if(option == JOptionPane.YES_OPTION) {
             table.getModel().removeRow(table.getSelectedRow());
         }
+    }
+
+    private void onAdd() {
+        var typeDialog = new AircraftTypeDialog();
+        typeDialog.setLocationRelativeTo(null);
+        typeDialog.setVisible(true);
     }
 }
