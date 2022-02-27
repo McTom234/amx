@@ -1,6 +1,7 @@
 package de.humboldtgym.amx.gui;
 
 import de.humboldtgym.amx.Application;
+import de.humboldtgym.amx.auxiliary.Util;
 import de.humboldtgym.amx.gui.components.InlineColorChooser;
 import de.humboldtgym.amx.gui.validtor.DoubleValidator;
 import de.humboldtgym.amx.gui.validtor.NameValidator;
@@ -99,14 +100,7 @@ public class EditAirlineDialog extends JDialog {
     }
 
     private void line(int y, JComponent left, JComponent right) {
-        var constraints = new GridBagConstraints();
-        constraints.gridx = 0;
-        constraints.gridy = y;
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.anchor = GridBagConstraints.LINE_START;
-        constraints.weightx = 1;
-        constraints.insets = new Insets(2, 2, 2, 2);
-
+        var constraints = Util.basicFormConstraints(y);
         add(left, constraints);
 
         constraints.gridx = 1;

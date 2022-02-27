@@ -84,4 +84,8 @@ public class AircraftTableModel extends AbstractTableModel {
         this.availableAircraft.remove(row);
         fireTableRowsDeleted(row, row);
     }
+
+    public Aircraft getAircraft(int row) {
+        return this.availableAircraft.get(row);
+    }
 }

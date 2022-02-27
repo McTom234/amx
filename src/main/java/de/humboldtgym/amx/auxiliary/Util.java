@@ -61,4 +61,16 @@ public final class Util {
             LOGGER.warn("Failed to change look and feel:", e);
         }
     }
+
+    public static GridBagConstraints basicFormConstraints(int y) {
+        var constraints = new GridBagConstraints();
+        constraints.gridx = 0;
+        constraints.gridy = y;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.anchor = GridBagConstraints.LINE_START;
+        constraints.weightx = 1;
+        constraints.insets = new Insets(2, 2, 2, 2);
+
+        return constraints;
+    }
 }

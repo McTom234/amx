@@ -1,5 +1,6 @@
 package de.humboldtgym.amx.gui.tabs;
 
+import de.humboldtgym.amx.gui.EditAircraftDialog;
 import de.humboldtgym.amx.gui.components.AircraftTable;
 
 import javax.swing.*;
@@ -72,7 +73,10 @@ public class FleetTab extends JPanel {
     }
 
     private void onEdit() {
-
+        var aircraft = table.getModel().getAircraft(table.getSelectedRow());
+        var editDialog = new EditAircraftDialog(aircraft, () -> {});
+        editDialog.setLocationRelativeTo(this);
+        editDialog.setVisible(true);
     }
 
     private void onDelete() {
