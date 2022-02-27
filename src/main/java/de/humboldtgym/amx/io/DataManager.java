@@ -1,32 +1,31 @@
 package de.humboldtgym.amx.io;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import de.humboldtgym.amx.exceptions.DataException;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class DataManager {
-    private final Gson gson;
+    private final ObjectReader reader;
+    private final ObjectWriter writer;
 
     private DataSet loadedSet;
 
     public DataManager() {
-        this.gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .create();
+        ObjectMapper mapper = new ObjectMapper();
+        this.reader = mapper.reader();
+        this.writer = mapper.writerWithDefaultPrettyPrinter();
     }
 
     public void loadDataSet(Path jsonInput) throws DataException {
-        try(BufferedReader in = Files.newBufferedReader(jsonInput)) {
-            this.loadedSet = gson.fromJson(in, DataSet.class);
-        } catch(JsonSyntaxException e) {
+        try (InputStream in = Files.newInputStream(jsonInput)) {
+            this.loadedSet = reader.readValue(in);
+        } catch (JsonParseException e) {
             throw new DataException("Corrupted Json received", e);
         } catch (IOException e) {
             throw new DataException("An I/O error occurred while loading", e);
@@ -36,11 +35,15 @@ public class DataManager {
     public void saveDataSet(Path jsonOutput) throws DataException {
         // TODO: Parent paths?
 
-        try(BufferedWriter out = Files.newBufferedWriter(jsonOutput)) {
-            gson.toJson(this.loadedSet, DataSet.class, out);
+        try (OutputStream out = Files.newOutputStream(jsonOutput)) {
+            this.writer.writeValue(out, this.loadedSet);
         } catch (IOException e) {
             throw new DataException("Failed to write Json data", e);
         }
+    }
+
+    public void unloadSet() {
+        this.loadedSet = null;
     }
 
     public void newSet() {
@@ -49,5 +52,9 @@ public class DataManager {
 
     public DataSet getLoadedSet() {
         return loadedSet;
+    }
+
+    public ObjectReader getObjectReader() {
+        return reader;
     }
 }
