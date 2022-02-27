@@ -2,19 +2,19 @@
 ###### Informatikprojekt von Jonas Bellman und Jannis Lübke
 
 ## Beschreibung
-Der Airline Manager X ist ein management Programm für Airlines. Diese verwaltet
-Flüge, Flugzeuge und Routen Mithilfe einer grafischen Oberfläche basierend 
-auf Java Swing. Das Programm speichert die eingegebenen Daten im Json Format unter
+Der Airline Manager X ist ein Management-Programm für Airlines. Diese verwaltet
+Flüge, Flugzeuge und Routen mithilfe einer grafischen Oberfläche basierend 
+auf Java Swing. Das Programm speichert die eingegebenen Daten im JSON-Format unter
 Nutzung der Bibliothek Gson.
 
 Die Datenbank wird vom Programm verwaltet und kann vom Nutzer ausgewählt werden.
-So ist es möglich, dass der Nutzer mehrere Datenbanken anlegt 
+So ist es möglich, dass der Nutzer mehrere Datenbanken anlegt.
 
 Flugzeuge sind in ihre Typen inklusive ihrer technischen Daten unterteilt. Diese
-Typen können vom Nutzer zur Laufzeit definiert werden unter Abfrage der benötigten
-Daten. Weiter lassen sich Flugzeuge Routen zuweisen und somit Flüge planen.
-Unterstützt werden diese Operationen durch die Programmoberfläche, welche eine
-interaktive Eingabe bietet.
+Typen können vom Nutzer zur Laufzeit definiert werden. Dazu werden die benötigten
+Daten in einem Pop-up-Fenster erfasst. Weiter lassen sich Flugzeuge Routen zuweisen
+und somit Flüge planen. Unterstützt werden diese Operationen durch die
+Programmoberfläche, welche eine interaktive Eingabe bietet.
 
 ## Vollständigkeit
 Datenstrukturen und Funktionen für das Laden und Speichern des Datensatzes sowie die
