@@ -12,12 +12,14 @@ import de.humboldtgym.amx.gui.events.ReloadContentEvent;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 
 public class MainWindow extends JFrame {
     public MainWindow() {
         super("AMX");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         setSize(640, 480);
         setLocationRelativeTo(null);
@@ -35,7 +37,7 @@ public class MainWindow extends JFrame {
         var fileMenu = new JMenu("File");
         menuBar.add(fileMenu);
 
-        fileMenu.add(Util.runnableItem("Exit", this::dispose));
+        fileMenu.add(Util.runnableItem("Exit", this::promptQuit));
 
         var extrasMenu = new JMenu("Extras");
         menuBar.add(extrasMenu);
@@ -53,7 +55,19 @@ public class MainWindow extends JFrame {
             setContentPane(new DataContentView());
 
             fileMenu.add(Util.runnableItem("Save", this::saveData));
-            fileMenu.add(Util.runnableItem("Unload data", this::unloadData));
+            fileMenu.add(Util.runnableItem("Unload data", () -> {
+                int selection = JOptionPane.showConfirmDialog(
+                        this,
+                        "Are you sure you want to unload the data set? All unsaved changes will be lost!",
+                        "Unload data",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+
+                if(selection == JOptionPane.YES_OPTION) {
+                    unloadData();
+                }
+            }));
 
 
             var dataMenu = new JMenu("Data");
@@ -66,6 +80,13 @@ public class MainWindow extends JFrame {
 
         setJMenuBar(menuBar);
         revalidate();
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                promptQuit();
+            }
+        });
     }
 
     @Override
@@ -121,6 +142,21 @@ public class MainWindow extends JFrame {
                         JOptionPane.ERROR_MESSAGE
                 );
             }
+        }
+    }
+
+    public void promptQuit() {
+        int selection = JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure you want to exit? All unsaved changes will be lost!",
+                "Exit application",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if(selection == JOptionPane.YES_OPTION) {
+            dispose();
+            System.exit(0);
         }
     }
 }

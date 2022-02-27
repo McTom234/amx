@@ -1,5 +1,6 @@
 package de.humboldtgym.amx.models.aircraft;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -231,6 +232,7 @@ public abstract class Aircraft {
         this.maxWeight = maxWeight;
     }
 
+    @JsonIgnore
     public WeightClass getWeightClass() {
         return WeightClass.MEDIUM; // TODO: Compute!
     }
