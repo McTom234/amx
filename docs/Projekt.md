@@ -36,14 +36,8 @@ Nicht finalisierte Klassen und Pakete sind eingeklappt und nicht vollständig an
 
 ## Datenstrukturen
 ### Flugzeuge
-Flugzeuge werden von Herstellern entwickelt und haben in ihrer Zulassung bestimmte
-technische Daten. Diese technischen Daten werden sind für alle gebauten Flugzeuge
-dieses Typen gültig. Die Klasse `AircraftType` ist mit einer Zulassung vergleichbar.
-Der Nutzer kann solche Datentypen definieren und dann Flugzeuge, die mit einer solchen
-Zulassung in Besitz hat hinzufügen. Für diese speziellen Flugzeuge sind Werte, wie z. B.
-die Flugstunden, die spezielle und eindeutige Registrierung oder der aktuelle Ort, wo sich
-das Flugzeug befindet. Ein Flugzeug kann als Version für Passagiere oder für Fracht
-ausgebaut werden. Ein Flugzeug mit Passagierkonfiguration kann Passagiere transportieren
-und enthält eine maximale Passagieranzahl und die Anzahl, die an Kabinenpersonal
-gebraucht wird. Flugzeuge mit Frachtkonfiguration haben dahingegen Eigenschaften, auf
-welcher Seite sie beladen werden und wie viele Frachtcontainer beladen werden können.
+Alle fliegende Objekte haben gemeinsame Eigenschaften, wie z.B. eine eindeutige
+Registrierung, eine Spannweite der Flügel oder die Fähigkeit zu fliegen (Red Bull...).
+Grob kann man fliegende Objekte in Flugzeuge und Hubschrauber unterteilen. Da es aber
+Hubschrauber und Flugzeuge unter anderem als Fracht- und Passagiervariante ausgebaut
+sind, kann man hier eine weitere Unterteilung vornehmen.
