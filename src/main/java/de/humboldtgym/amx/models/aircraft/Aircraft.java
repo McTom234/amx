@@ -1,5 +1,8 @@
 package de.humboldtgym.amx.models.aircraft;
 
+import de.humboldtgym.amx.Application;
+import de.humboldtgym.amx.auxiliary.Util;
+import de.humboldtgym.amx.models.Airline;
 import de.humboldtgym.amx.models.enums.WeightClass;
 import org.apache.logging.log4j.LogManager;
 
@@ -8,53 +11,83 @@ import java.util.Date;
 public abstract class Aircraft {
 	private String registration;
 	private String icao;
-	private int length;
-	private int width;
-	private int height;
+	/** Aircraft's body length in meters (m). */
+	private double length;
+	/** Aircraft's body width in meters (m). */
+	private double width;
+	/** Aircraft's body height in meters (m). */
+	private double height;
+	/** Aircraft's maximum flight speed in knots (kts), which is nautical/sea miles per hour. */
+	private int flightSpeedPerHour;
+	/** Aircraft's body weight in kilograms (kg). */
 	private int emptyWeight;
+	/** Aircraft's maximum flight weight in kilograms (kg). */
 	private int maxWeight;
 	private WeightClass weightClass;
+	/** Aircraft's maximum fuel capacity in kilograms (kg). */
 	private int maxFuel;
-	private int fuelPerHour;
+	/** Aircraft's fuel consumption in kilograms (kg) per hour. */
+	private double fuelPerHour;
+	/** Aircraft's maintenance interval in hours. */
 	private int maintenanceInterval;
-	private int timeToNextMaintenance;
+	/** Aircraft's time to next maintenance in hours. */
+	private double timeToNextMaintenance;
 	private Date bought;
-	private int flightHours;
+	private double flightHours;
 	private String location;
 	private int minPilots;
 
 	public boolean requireMaintenance() {
-		if (timeToNextMaintenance > maintenanceInterval) {
+		if (getTimeToNextMaintenance() > getMaintenanceInterval()) {
 			LogManager.getLogger().error(String.format("Next maintenance for %s must not be later than maximum maintenance interval.", getRegistration()));
 			return true;
 		}
-		if (timeToNextMaintenance <= 0) {
+		if (getTimeToNextMaintenance() <= 0) {
 			LogManager.getLogger().error(String.format("%s must be maintained.", getRegistration()));
 			return true;
 		}
 		return false;
 	}
 
-	public void fly(String dest) {
-		if (!checkFlightData(dest)) return;
-		this.location = dest;
-		addFlightHours(0); // TODO add flight time API
+	public void fly(String dest, Airline airline) {
+		if (checkFlightDataForErrors(dest)) return;
+		try {
+			double actualRangeNM = Util.convertDistanceKMToNM(Application.getInstance().getAirportManager().computeDistance(getLocation(), dest));
+			addFlightHours(actualRangeNM / getFlightSpeedPerHour());
+		} catch (Exception e) {
+			LogManager.getLogger().error(e);
+			return;
+		}
+		boarding(airline);
 		startEngines();
+		setLocation(dest);
 	}
 
-	public boolean checkFlightData(String dest) {
+	/**
+	 * @param dest Flight destination.
+	 * @return 	false - no errors and invalid data found<br>
+	 * 			true - invalid flight data or error in flight data.
+	 */
+	public boolean checkFlightDataForErrors(String dest) {
 		if (requireMaintenance()) {
 			LogManager.getLogger().error(String.format("%s cannot depart. Aircraft needs maintenance.", getRegistration()));
-			return false;
+			return true;
 		}
-		int flightTime = 0;
-		double maxFlightTime = getMaxFuel() / getFuelPerHour();
-		if (0 > maxFlightTime) { // TODO add flight time API
-			LogManager.getLogger().error(String.format("%s cannot depart. The aircraft cannot fly that long. Your selected Route has a flight time of %d hours. The aircraft can fly for a maximum time of %f hours.", getRegistration(), flightTime, maxFlightTime));
-			return false;
+		try {
+			double maxRangeKM = Util.convertDistanceNMToKM(getFlightSpeedPerHour() / (getMaxFuel() / getFuelPerHour()));
+			double actualRangeKM = Application.getInstance().getAirportManager().computeDistance(getLocation(), dest);
+			if (actualRangeKM > maxRangeKM) {
+				LogManager.getLogger().error(String.format("%s cannot depart. The aircraft cannot fly that long. Your selected Route has a distance of %fkm. The aircraft can fly a maximum distance of %fkm.", getRegistration(), actualRangeKM, maxRangeKM));
+				return true;
+			}
+		} catch (Exception e) {
+			LogManager.getLogger().error(e);
+			return true;
 		}
-		return true;
-	};
+		return false;
+	}
+
+	public abstract void boarding(Airline airline);
 
 	public abstract void startEngines();
 
@@ -74,28 +107,36 @@ public abstract class Aircraft {
 		this.icao = icao;
 	}
 
-	public int getLength() {
+	public double getLength() {
 		return length;
 	}
 
-	public void setLength(int length) {
+	public void setLength(double length) {
 		this.length = length;
 	}
 
-	public int getWidth() {
+	public double getWidth() {
 		return width;
 	}
 
-	public void setWidth(int width) {
+	public void setWidth(double width) {
 		this.width = width;
 	}
 
-	public int getHeight() {
+	public double getHeight() {
 		return height;
 	}
 
-	public void setHeight(int height) {
+	public void setHeight(double height) {
 		this.height = height;
+	}
+
+	public int getFlightSpeedPerHour() {
+		return flightSpeedPerHour;
+	}
+
+	public void setFlightSpeedPerHour(int flightSpeedPerHour) {
+		this.flightSpeedPerHour = flightSpeedPerHour;
 	}
 
 	public int getEmptyWeight() {
@@ -130,11 +171,11 @@ public abstract class Aircraft {
 		this.maxFuel = maxFuel;
 	}
 
-	public int getFuelPerHour() {
+	public double getFuelPerHour() {
 		return fuelPerHour;
 	}
 
-	public void setFuelPerHour(int fuelPerHour) {
+	public void setFuelPerHour(double fuelPerHour) {
 		this.fuelPerHour = fuelPerHour;
 	}
 
@@ -154,16 +195,16 @@ public abstract class Aircraft {
 		this.bought = bought;
 	}
 
-	public int getFlightHours() {
+	public double getFlightHours() {
 		return flightHours;
 	}
 
-	public void addFlightHours(int hours) {
+	public void addFlightHours(double hours) {
 		this.flightHours += hours;
 		this.timeToNextMaintenance += hours;
 	}
 
-	public void setFlightHours(int flightHours) {
+	public void setFlightHours(double flightHours) {
 		this.flightHours = flightHours;
 	}
 
@@ -187,11 +228,11 @@ public abstract class Aircraft {
 		this.timeToNextMaintenance = this.maintenanceInterval;
 	}
 
-	public int getTimeToNextMaintenance() {
+	public double getTimeToNextMaintenance() {
 		return timeToNextMaintenance;
 	}
 
-	public void setTimeToNextMaintenance(int timeToNextMaintenance) {
+	public void setTimeToNextMaintenance(double timeToNextMaintenance) {
 		this.timeToNextMaintenance = timeToNextMaintenance;
 	}
 }

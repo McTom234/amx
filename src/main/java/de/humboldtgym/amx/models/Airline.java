@@ -15,10 +15,10 @@ public class Airline {
     private String name;
     private int primaryColor;
     private int secondaryColor;
-    private int weightPerPassenger;
-    private int weightCargoA;
-    private int weightCargoB;
-    private int weightCargoC;
+    private double weightPerPassenger;
+    private double weightCargoA;
+    private double weightCargoB;
+    private double weightCargoC;
 
     private final List<Aircraft> fleet;
     private final List<Route> routes;
@@ -55,10 +55,10 @@ public class Airline {
             @JsonProperty("name") String name,
             @JsonProperty("primaryColor") int primaryColor,
             @JsonProperty("secondaryColor") int secondaryColor,
-            @JsonProperty("weightPerPassenger") int weightPerPassenger,
-            @JsonProperty("weightCargoA") int weightCargoA,
-            @JsonProperty("weightCargoB") int weightCargoB,
-            @JsonProperty("weightCargoC") int weightCargoC,
+            @JsonProperty("weightPerPassenger") double weightPerPassenger,
+            @JsonProperty("weightCargoA") double weightCargoA,
+            @JsonProperty("weightCargoC") double weightCargoC,
+            @JsonProperty("weightCargoB") double weightCargoB,
             @JsonProperty("fleet") List<Aircraft> fleet,
             @JsonProperty("routes") List<Route> routes,
             @JsonProperty("flights") List<Flight> flights,
@@ -107,38 +107,38 @@ public class Airline {
     }
 
     @JsonProperty
-    public int getWeightPerPassenger() {
+    public double getWeightPerPassenger() {
         return weightPerPassenger;
     }
 
-    public void setWeightPerPassenger(int weightPerPassenger) {
+    public void setWeightPerPassenger(double weightPerPassenger) {
         this.weightPerPassenger = weightPerPassenger;
     }
 
     @JsonProperty
-    public int getWeightCargoA() {
+    public double getWeightCargoA() {
         return weightCargoA;
     }
 
-    public void setWeightCargoA(int weightCargoA) {
+    public void setWeightCargoA(double weightCargoA) {
         this.weightCargoA = weightCargoA;
     }
 
     @JsonProperty
-    public int getWeightCargoB() {
+    public double getWeightCargoB() {
         return weightCargoB;
     }
 
-    public void setWeightCargoB(int weightCargoB) {
+    public void setWeightCargoB(double weightCargoB) {
         this.weightCargoB = weightCargoB;
     }
 
     @JsonProperty
-    public int getWeightCargoC() {
+    public double getWeightCargoC() {
         return weightCargoC;
     }
 
-    public void setWeightCargoC(int weightCargoC) {
+    public void setWeightCargoC(double weightCargoC) {
         this.weightCargoC = weightCargoC;
     }
 }

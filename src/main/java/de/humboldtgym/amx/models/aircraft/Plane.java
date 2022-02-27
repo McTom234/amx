@@ -1,34 +1,36 @@
 package de.humboldtgym.amx.models.aircraft;
 
+import de.humboldtgym.amx.Application;
+import de.humboldtgym.amx.models.Airline;
 import org.apache.logging.log4j.LogManager;
 
 public abstract class Plane extends Aircraft {
 	private int minRunwayLength;
-	private int wingSpan;
+	private double wingSpan;
 	private boolean winglets;
 	private boolean sharklets;
 	private int engines;
 
 	@Override
-	public boolean checkFlightData(String dest) {
-		super.checkFlightData(dest);
-		if (minRunwayLength < 0) { // TODO add flight time API
+	public boolean checkFlightDataForErrors(String dest) {
+		super.checkFlightDataForErrors(dest);
+		if (getMinRunwayLength() > Application.getInstance().getAirportManager().getLongestRunwayForAirport(dest).getLength()) {
 			LogManager.getLogger().error(String.format("%s cannot depart. Runway length at %s too short!", getRegistration(), dest));
-			return false;
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	@Override
 	public void startEngines() {
-		LogManager.getLogger().info(String.format("%s started %d engines. Consuming %d fuel per hour.", getRegistration(), getEngines(), getFuelPerHour()));
+		LogManager.getLogger().info(String.format("%s started %d engines. Consuming %f fuel per hour.", getRegistration(), getEngines(), getFuelPerHour()));
 	}
 
-	public int getWingSpan() {
+	public double getWingSpan() {
 		return wingSpan;
 	}
 
-	public void setWingSpan(int wingSpan) {
+	public void setWingSpan(double wingSpan) {
 		this.wingSpan = wingSpan;
 	}
 
