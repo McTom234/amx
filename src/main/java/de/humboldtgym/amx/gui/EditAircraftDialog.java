@@ -11,8 +11,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.Date;
 import java.time.ZoneId;
-import java.util.Date;
+import java.util.Objects;
 
 public class EditAircraftDialog extends JDialog {
     private final Aircraft aircraft;
@@ -31,7 +32,7 @@ public class EditAircraftDialog extends JDialog {
     private final IntValidator maxFuel;
     private final DoubleValidator fuelPerHour;
     private final IntValidator maintanenceInterval;
-    private Date bought;
+    private final DatePicker bought;
     private final DoubleValidator flightHours;
     private final NameValidator location;
     private final IntValidator minPilots;
@@ -47,32 +48,31 @@ public class EditAircraftDialog extends JDialog {
         var lengthField = new JTextField(Double.toString(aircraft.getLength()));
         var widthField = new JTextField(Double.toString(aircraft.getWidth()));
         var heightField = new JTextField(Double.toString(aircraft.getHeight()));
-        var flightSpeedField = new JTextField(Double.toString(aircraft.getFlightSpeedPerHour()));
+        var flightSpeedField = new JTextField(Integer.toString(aircraft.getFlightSpeedPerHour()));
         var emptyWeightField = new JTextField(Integer.toString(aircraft.getEmptyWeight()));
         var maxWeightField = new JTextField(Integer.toString(aircraft.getMaxWeight()));
         var maxFuelField = new JTextField(Integer.toString(aircraft.getMaxFuel()));
         var fuelPerHourField = new JTextField(Double.toString(aircraft.getFuelPerHour()));
         var maintenanceIntervalField = new JTextField(Integer.toString(aircraft.getMaintenanceInterval()));
-        var boughtField = createDatePicker();
         var flightHoursField = new JTextField(Double.toString(aircraft.getFlightHours()));
         var locationField = new JTextField(aircraft.getLocation());
         var minPilotsField = new JTextField(Integer.toString(aircraft.getMinPilots()));
 
         this.registration = new RegistrationValidator(registrationField);
         this.icao = new IcaoValidator(icaoField);
-        this.length = new DoubleValidator(lengthField);
-        this.width = new DoubleValidator(widthField);
-        this.height = new DoubleValidator(heightField);
-        this.flightSpeed = new IntValidator(flightSpeedField);
-        this.emptyWeight = new IntValidator(emptyWeightField);
-        this.maxWeight = new IntValidator(maxWeightField);
-        this.maxFuel = new IntValidator(maxFuelField);
-        this.fuelPerHour = new DoubleValidator(fuelPerHourField);
-        this.maintanenceInterval = new IntValidator(maintenanceIntervalField);
-        this.bought = aircraft.getBought();
-        this.flightHours = new DoubleValidator(flightHoursField);
+        this.length = new DoubleValidator(lengthField, 5.0, 300.0);
+        this.width = new DoubleValidator(widthField, 3.0, 20.0);
+        this.height = new DoubleValidator(heightField, 5.0, 20.0);
+        this.flightSpeed = new IntValidator(flightSpeedField, 50, 500);
+        this.emptyWeight = new IntValidator(emptyWeightField, 1000);
+        this.maxWeight = new IntValidator(maxWeightField, 1000);
+        this.maxFuel = new IntValidator(maxFuelField, 10);
+        this.fuelPerHour = new DoubleValidator(fuelPerHourField, 1.0);
+        this.maintanenceInterval = new IntValidator(maintenanceIntervalField, 72);
+        this.bought = createDatePicker();
+        this.flightHours = new DoubleValidator(flightHoursField, 0);
         this.location = new NameValidator(locationField);
-        this.minPilots = new IntValidator(minPilotsField);
+        this.minPilots = new IntValidator(minPilotsField, 1);
 
         setTitle("Edit aircraft");
         setModal(true);
@@ -98,7 +98,7 @@ public class EditAircraftDialog extends JDialog {
         line(7, new JLabel("Max fuel"), maxFuelField);
         line(8, new JLabel("Fuel per hour"), fuelPerHourField);
         line(9, new JLabel("Maintenance interval"), maintenanceIntervalField);
-        line(10, new JLabel("Bought at"), boughtField);
+        line(10, new JLabel("Bought at"), this.bought);
         line(11, new JLabel("Flight hours"), flightHoursField);
         line(12, new JLabel("Location"), locationField);
         line(13, new JLabel("Min pilots"), minPilotsField);
@@ -198,7 +198,43 @@ public class EditAircraftDialog extends JDialog {
     }
 
     private void ok(ActionEvent e) {
+        var batch = new ValidationBatch();
+        var registration = this.registration.validate(batch);
+        var icao = this.icao.validate(batch);
+        var length = this.length.validate(batch);
+        var width = this.width.validate(batch);
+        var height = this.height.validate(batch);
+        var flightSpeed = this.flightSpeed.validate(batch);
+        var emptyWeight = this.emptyWeight.validate(batch);
+        var maxWeight = this.maxWeight.validate(batch);
+        var maxFuel = this.maxFuel.validate(batch);
+        var fuelPerHour = this.fuelPerHour.validate(batch);
+        var maintenanceInterval = this.maintanenceInterval.validate(batch);
+        var flightHours = this.flightHours.validate(batch);
+        var location = this.location.validate(batch);
+        var minPilots = this.minPilots.validate(batch);
 
+        if(!batch.isOk()) {
+            return;
+        }
+
+        aircraft.setRegistration(registration);
+        aircraft.setIcao(icao);
+        aircraft.setLength(Objects.requireNonNull(length));
+        aircraft.setWidth(Objects.requireNonNull(width));
+        aircraft.setHeight(Objects.requireNonNull(height));
+        aircraft.setFlightSpeedPerHour(Objects.requireNonNull(flightSpeed));
+        aircraft.setEmptyWeight(Objects.requireNonNull(emptyWeight));
+        aircraft.setMaxWeight(Objects.requireNonNull(maxWeight));
+        aircraft.setMaxFuel(Objects.requireNonNull(maxFuel));
+        aircraft.setFuelPerHour(Objects.requireNonNull(fuelPerHour));
+        aircraft.setMaintenanceInterval(Objects.requireNonNull(maintenanceInterval));
+        aircraft.setBought(Date.from(this.bought.getDate().atStartOfDay().atZone(ZoneId.of("Z")).toInstant()));
+        aircraft.setFlightHours(Objects.requireNonNull(flightHours));
+        aircraft.setLocation(location);
+        aircraft.setMinPilots(Objects.requireNonNull(minPilots));
+
+        this.dispose();
     }
 
     private void cancel(ActionEvent e) {

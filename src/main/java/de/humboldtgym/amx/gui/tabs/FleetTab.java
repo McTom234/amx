@@ -73,10 +73,14 @@ public class FleetTab extends JPanel {
     }
 
     private void onEdit() {
-        var aircraft = table.getModel().getAircraft(table.getSelectedRow());
-        var editDialog = new EditAircraftDialog(aircraft, () -> {});
+        int row = table.getSelectedRow();
+
+        var aircraft = table.getModel().getAircraft(row);
+        var editDialog = new EditAircraftDialog(aircraft, null);
         editDialog.setLocationRelativeTo(this);
         editDialog.setVisible(true);
+
+        table.getModel().fireTableRowsUpdated(row, row);
     }
 
     private void onDelete() {
