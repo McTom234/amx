@@ -34,7 +34,6 @@ public class PassengerPlane extends Plane implements PassengerAircraft {
             @JsonProperty(required = true, value = "minRunwayLength") int minRunwayLength,
             @JsonProperty(required = true, value = "wingSpan") double wingSpan,
             @JsonProperty(required = true, value = "winglets") boolean winglets,
-            @JsonProperty(required = true, value = "sharklets") boolean sharklets,
             @JsonProperty(required = true, value = "engines") int engines,
             @JsonProperty(required = true, value = "maxPassengers") int maxPassengers
     ) {
@@ -59,7 +58,6 @@ public class PassengerPlane extends Plane implements PassengerAircraft {
                 minRunwayLength,
                 wingSpan,
                 winglets,
-                sharklets,
                 engines
         );
 

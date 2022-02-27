@@ -11,7 +11,6 @@ public abstract class Plane extends Aircraft {
 	private int minRunwayLength;
 	private double wingSpan;
 	private boolean winglets;
-	private boolean sharklets;
 	private int engines;
 
 	public Plane(
@@ -35,7 +34,6 @@ public abstract class Plane extends Aircraft {
 			int minRunwayLength,
 			double wingSpan,
 			boolean winglets,
-			boolean sharklets,
 			int engines
 	) {
 		super(
@@ -59,7 +57,6 @@ public abstract class Plane extends Aircraft {
 		this.minRunwayLength = minRunwayLength;
 		this.wingSpan = wingSpan;
 		this.winglets = winglets;
-		this.sharklets = sharklets;
 		this.engines = engines;
 	}
 
@@ -92,14 +89,6 @@ public abstract class Plane extends Aircraft {
 
 	public void setWinglets(boolean winglets) {
 		this.winglets = winglets;
-	}
-
-	public boolean isSharklets() {
-		return sharklets;
-	}
-
-	public void setSharklets(boolean sharklets) {
-		this.sharklets = sharklets;
 	}
 
 	public int getEngines() {

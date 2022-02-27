@@ -4,9 +4,7 @@ import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 import de.humboldtgym.amx.auxiliary.Util;
 import de.humboldtgym.amx.gui.validator.*;
-import de.humboldtgym.amx.models.aircraft.Aircraft;
-import de.humboldtgym.amx.models.aircraft.CargoAircraft;
-import de.humboldtgym.amx.models.aircraft.PassengerAircraft;
+import de.humboldtgym.amx.models.aircraft.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,6 +46,14 @@ public class EditAircraftDialog extends JDialog {
     private final JCheckBox frontHatch;
     private final JCheckBox sideHatch;
     private final JCheckBox backHatch;
+
+    private final IntValidator minRunwayLength;
+    private final DoubleValidator wingSpan;
+    private final JCheckBox winglets;
+    private final IntValidator engines;
+
+    private final IntValidator rotors;
+    private final DoubleValidator rotorSpan;
 
     public EditAircraftDialog(Aircraft aircraft, Runnable cancelCallback) {
         this.aircraft = aircraft;
@@ -115,11 +121,52 @@ public class EditAircraftDialog extends JDialog {
         line(12, new JLabel("Location"), locationField);
         line(13, new JLabel("Min pilots"), minPilotsField);
 
+        int nextLine = -1;
+
+        if(aircraft instanceof Plane plane) {
+            var minRunwayLengthField = new JTextField(Integer.toString(plane.getMinRunwayLength()));
+            var wingSpanField = new JTextField(Double.toString(plane.getWingSpan()));
+            var enginesField = new JTextField(Integer.toString(plane.getEngines()));
+
+            this.minRunwayLength = new IntValidator(minRunwayLengthField, 500, 4000);
+            this.wingSpan = new DoubleValidator(wingSpanField, 5.0, 100.0);
+            this.engines = new IntValidator(enginesField, 1, 16);
+            this.winglets = new JCheckBox((String) null, plane.isWinglets());
+
+            line(14, new JLabel("Min runway length"), minRunwayLengthField);
+            line(15, new JLabel("Wing span"), wingSpanField);
+            line(16, new JLabel("Engine count"), enginesField);
+            line(17, new JLabel("Winglets"), this.winglets);
+
+            nextLine = 18;
+        } else {
+            this.minRunwayLength = null;
+            this.wingSpan = null;
+            this.engines = null;
+            this.winglets = null;
+        }
+
+        if(aircraft instanceof Helicopter helicopter) {
+            var rotorsField = new JTextField(Integer.toString(helicopter.getRotors()));
+            var rotorSpanField = new JTextField(Double.toString(helicopter.getRotorSpan()));
+
+            this.rotors = new IntValidator(rotorsField, 2);
+            this.rotorSpan = new DoubleValidator(rotorSpanField, 5.0);
+
+            line(14, new JLabel("Rotor count"), rotorsField);
+            line(15, new JLabel("Rotor span"), rotorSpanField);
+
+            nextLine = 16;
+        } else {
+            this.rotors = null;
+            this.rotorSpan = null;
+        }
+
         if(aircraft instanceof PassengerAircraft passengerAircraft) {
             var passengersField = new JTextField(Integer.toString(passengerAircraft.getMaxPassengers()));
             this.maxPassengers = new IntValidator(passengersField, 1, 2000);
 
-            line(14, new JLabel("Max passengers"), passengersField);
+            line(nextLine, new JLabel("Max passengers"), passengersField);
         } else {
             this.maxPassengers = null;
         }
@@ -146,7 +193,7 @@ public class EditAircraftDialog extends JDialog {
             maxCargoPanel.add(Box.createHorizontalStrut(5));
             maxCargoPanel.add(maxCargoCField);
 
-            line(14, new JLabel("Max cargo"), maxCargoPanel);
+            line(nextLine, new JLabel("Max cargo"), maxCargoPanel);
 
             var hatchesPanel = new JPanel();
             hatchesPanel.setLayout(new BoxLayout(hatchesPanel, BoxLayout.X_AXIS));
@@ -157,7 +204,7 @@ public class EditAircraftDialog extends JDialog {
             hatchesPanel.add(Box.createHorizontalStrut(5));
             hatchesPanel.add(backHatch);
 
-            line(15, new JLabel("Hatches"), hatchesPanel);
+            line(nextLine + 1, new JLabel("Hatches"), hatchesPanel);
         } else {
             this.maxCargoA = null;
             this.maxCargoB = null;
@@ -279,7 +326,28 @@ public class EditAircraftDialog extends JDialog {
         var location = this.location.validate(batch);
         var minPilots = this.minPilots.validate(batch);
 
+        Integer minRunwayLength = null;
+        Double wingSpan = null;
+        Boolean winglets = null;
+        Integer engines = null;
+
+        if(aircraft instanceof Plane) {
+            minRunwayLength = this.minRunwayLength.validate(batch);
+            wingSpan = this.wingSpan.validate(batch);
+            winglets = this.winglets.isSelected();
+            engines = this.engines.validate(batch);
+        }
+
+        Integer rotors = null;
+        Double rotorSpan = null;
+
+        if(aircraft instanceof Helicopter) {
+            rotors = this.rotors.validate(batch);
+            rotorSpan = this.rotorSpan.validate(batch);
+        }
+
         Integer maxPassengers = null;
+
         if(aircraft instanceof PassengerAircraft) {
             maxPassengers = this.maxPassengers.validate(batch);
         }
@@ -322,6 +390,18 @@ public class EditAircraftDialog extends JDialog {
         aircraft.setLocation(location);
         aircraft.setMinPilots(Objects.requireNonNull(minPilots));
 
+        if(aircraft instanceof Plane plane) {
+            plane.setMinRunwayLength(Objects.requireNonNull(minRunwayLength));
+            plane.setWingSpan(Objects.requireNonNull(wingSpan));
+            plane.setWinglets(Objects.requireNonNull(winglets));
+            plane.setEngines(Objects.requireNonNull(engines));
+        }
+
+        if(aircraft instanceof Helicopter helicopter) {
+            helicopter.setRotors(Objects.requireNonNull(rotors));
+            helicopter.setRotorSpan(Objects.requireNonNull(rotorSpan));
+        }
+
         if(aircraft instanceof PassengerAircraft passengerAircraft) {
             passengerAircraft.setMaxPassengers(Objects.requireNonNull(maxPassengers));
         }
@@ -331,9 +411,9 @@ public class EditAircraftDialog extends JDialog {
             cargoAircraft.setMaxCargoB(Objects.requireNonNull(maxCargoB));
             cargoAircraft.setMaxCargoC(Objects.requireNonNull(maxCargoC));
 
-            cargoAircraft.setFrontHatch(frontHatch);
-            cargoAircraft.setSideHatch(sideHatch);
-            cargoAircraft.setBackHatch(backHatch);
+            cargoAircraft.setFrontHatch(Objects.requireNonNull(frontHatch));
+            cargoAircraft.setSideHatch(Objects.requireNonNull(sideHatch));
+            cargoAircraft.setBackHatch(Objects.requireNonNull(backHatch));
         }
 
         this.dispose();

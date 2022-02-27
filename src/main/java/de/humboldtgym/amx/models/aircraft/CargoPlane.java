@@ -37,7 +37,6 @@ public class CargoPlane extends Plane implements CargoAircraft {
 			@JsonProperty(required = true, value = "minRunwayLength") int minRunwayLength,
 			@JsonProperty(required = true, value = "wingSpan") double wingSpan,
 			@JsonProperty(required = true, value = "winglets") boolean winglets,
-			@JsonProperty(required = true, value = "sharklets") boolean sharklets,
 			@JsonProperty(required = true, value = "engines") int engines,
 			@JsonProperty(required = true, value = "maxCargoA") int maxCargoA,
 			@JsonProperty(required = true, value = "maxCargoB") int maxCargoB,
@@ -67,7 +66,6 @@ public class CargoPlane extends Plane implements CargoAircraft {
 				minRunwayLength,
 				wingSpan,
 				winglets,
-				sharklets,
 				engines
 		);
 		this.maxCargoA = maxCargoA;

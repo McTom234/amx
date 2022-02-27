@@ -85,7 +85,6 @@ public class AircraftTypeDialog extends JDialog {
                         0,
                         0.0,
                         false,
-                        false,
                         0,
                         0,
                         0,
@@ -145,7 +144,6 @@ public class AircraftTypeDialog extends JDialog {
                         0,
                         0,
                         0.0,
-                        false,
                         false,
                         0,
                         0
