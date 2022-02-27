@@ -104,21 +104,24 @@ public class EditAircraftDialog extends JDialog {
 
         realContent.setLayout(new GridBagLayout());
 
-        line(0, new JLabel("Registration"), registrationField);
-        line(1, new JLabel("ICAO"), icaoField);
-        line(2, new JLabel("Length"), lengthField);
-        line(3, new JLabel("Width"), widthField);
-        line(4, new JLabel("Height"), heightField);
-        line(5, new JLabel("Knots"), flightSpeedField);
-        line(6, new JLabel("Empty weight"), emptyWeightField);
-        line(7, new JLabel("Max takeoff weight"), maxWeightField);
-        line(8, new JLabel("Max fuel"), maxFuelField);
-        line(9, new JLabel("Fuel per hour"), fuelPerHourField);
-        line(10, new JLabel("Maintenance interval"), maintenanceIntervalField);
-        line(11, new JLabel("Bought at"), this.bought);
-        line(12, new JLabel("Flight hours"), flightHoursField);
-        line(13, new JLabel("Location"), locationField);
-        line(14, new JLabel("Min pilots"), minPilotsField);
+
+        addHeading("General", 1);
+
+        line(2, new JLabel("Registration"), registrationField);
+        line(3, new JLabel("ICAO"), icaoField);
+        line(4, new JLabel("Length"), lengthField);
+        line(5, new JLabel("Width"), widthField);
+        line(6, new JLabel("Height"), heightField);
+        line(7, new JLabel("Knots"), flightSpeedField);
+        line(8, new JLabel("Empty weight"), emptyWeightField);
+        line(9, new JLabel("Max takeoff weight"), maxWeightField);
+        line(10, new JLabel("Max fuel"), maxFuelField);
+        line(11, new JLabel("Fuel per hour"), fuelPerHourField);
+        line(12, new JLabel("Maintenance interval"), maintenanceIntervalField);
+        line(13, new JLabel("Bought at"), this.bought);
+        line(14, new JLabel("Flight hours"), flightHoursField);
+        line(15, new JLabel("Location"), locationField);
+        line(16, new JLabel("Min pilots"), minPilotsField);
 
         int nextLine = -1;
 
@@ -132,12 +135,14 @@ public class EditAircraftDialog extends JDialog {
             this.engines = new IntValidator(enginesField, 1, 16);
             this.winglets = new JCheckBox((String) null, plane.isWinglets());
 
-            line(15, new JLabel("Min runway length"), minRunwayLengthField);
-            line(16, new JLabel("Wing span"), wingSpanField);
-            line(17, new JLabel("Engine count"), enginesField);
-            line(18, new JLabel("Winglets"), this.winglets);
+            addHeading("Plane", 17);
 
-            nextLine = 19;
+            line(18, new JLabel("Min runway length"), minRunwayLengthField);
+            line(19, new JLabel("Wing span"), wingSpanField);
+            line(20, new JLabel("Engine count"), enginesField);
+            line(21, new JLabel("Winglets"), this.winglets);
+
+            nextLine = 22;
         } else {
             this.minRunwayLength = null;
             this.wingSpan = null;
@@ -152,10 +157,12 @@ public class EditAircraftDialog extends JDialog {
             this.rotors = new IntValidator(rotorsField, 2);
             this.rotorSpan = new DoubleValidator(rotorSpanField, 5.0);
 
-            line(15, new JLabel("Rotor count"), rotorsField);
-            line(17, new JLabel("Rotor span"), rotorSpanField);
+            addHeading("Helicopter", 17);
 
-            nextLine = 18;
+            line(18, new JLabel("Rotor count"), rotorsField);
+            line(19, new JLabel("Rotor span"), rotorSpanField);
+
+            nextLine = 20;
         } else {
             this.rotors = null;
             this.rotorSpan = null;
@@ -165,7 +172,10 @@ public class EditAircraftDialog extends JDialog {
             var passengersField = new JTextField(Integer.toString(passengerAircraft.getMaxPassengers()));
             this.maxPassengers = new IntValidator(passengersField, 1, 2000);
 
-            line(nextLine, new JLabel("Max passengers"), passengersField);
+            addHeading("Passenger", nextLine);
+
+            line(nextLine + 2, new JLabel("Max passengers"), passengersField);
+            nextLine += 3;
         } else {
             this.maxPassengers = null;
         }
@@ -183,6 +193,8 @@ public class EditAircraftDialog extends JDialog {
             this.maxCargoB = new IntValidator(maxCargoBField, 0);
             this.maxCargoC = new IntValidator(maxCargoCField, 0);
 
+            addHeading("Cargo", nextLine);
+
             var maxCargoPanel = new JPanel();
             maxCargoPanel.setLayout(new BoxLayout(maxCargoPanel, BoxLayout.X_AXIS));
 
@@ -192,7 +204,7 @@ public class EditAircraftDialog extends JDialog {
             maxCargoPanel.add(Box.createHorizontalStrut(5));
             maxCargoPanel.add(maxCargoCField);
 
-            line(nextLine, new JLabel("Max cargo"), maxCargoPanel);
+            line(nextLine + 2, new JLabel("Max cargo"), maxCargoPanel);
 
             var hatchesPanel = new JPanel();
             hatchesPanel.setLayout(new BoxLayout(hatchesPanel, BoxLayout.X_AXIS));
@@ -203,7 +215,9 @@ public class EditAircraftDialog extends JDialog {
             hatchesPanel.add(Box.createHorizontalStrut(5));
             hatchesPanel.add(backHatch);
 
-            line(nextLine + 1, new JLabel("Hatches"), hatchesPanel);
+            line(nextLine + 3, new JLabel("Hatches"), hatchesPanel);
+
+            nextLine += 4;
         } else {
             this.maxCargoA = null;
             this.maxCargoB = null;
@@ -213,6 +227,8 @@ public class EditAircraftDialog extends JDialog {
             this.backHatch = null;
             this.sideHatch = null;
         }
+
+        addSpacer(nextLine);
 
         var buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
@@ -293,6 +309,27 @@ public class EditAircraftDialog extends JDialog {
         );
 
         return picker;
+    }
+
+    private void addSpacer(int y) {
+        var spacer = Box.createVerticalGlue();
+
+        var constraints = Util.basicFormConstraints(y);
+        constraints.weighty = 2;
+        constraints.weightx = 1;
+
+        realContent.add(spacer, constraints);
+    }
+
+    private void addHeading(String content, int y) {
+        var generalLabel = new JLabel(content);
+        generalLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+        generalLabel.setFont(generalLabel.getFont().deriveFont(Font.PLAIN, 20.0f));
+
+        var constraints = Util.basicFormConstraints(y);
+        constraints.weightx = 2;
+
+        realContent.add(generalLabel, constraints);
     }
 
     private void ok(ActionEvent e) {
