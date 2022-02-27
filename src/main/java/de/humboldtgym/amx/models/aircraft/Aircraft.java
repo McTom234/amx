@@ -11,6 +11,7 @@ public abstract class Aircraft {
 	private double length;
 	private double width;
 	private double height;
+	private int flightSpeedPerHour;
 	private int emptyWeight;
 	private int maxWeight;
 	private WeightClass weightClass;
@@ -96,6 +97,14 @@ public abstract class Aircraft {
 
 	public void setHeight(double height) {
 		this.height = height;
+	}
+
+	public int getFlightSpeedPerHour() {
+		return flightSpeedPerHour;
+	}
+
+	public void setFlightSpeedPerHour(int flightSpeedPerHour) {
+		this.flightSpeedPerHour = flightSpeedPerHour;
 	}
 
 	public int getEmptyWeight() {
