@@ -5,6 +5,8 @@ import com.github.lgooddatepicker.components.DatePickerSettings;
 import de.humboldtgym.amx.auxiliary.Util;
 import de.humboldtgym.amx.gui.validator.*;
 import de.humboldtgym.amx.models.aircraft.Aircraft;
+import de.humboldtgym.amx.models.aircraft.CargoAircraft;
+import de.humboldtgym.amx.models.aircraft.PassengerAircraft;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,6 +38,16 @@ public class EditAircraftDialog extends JDialog {
     private final DoubleValidator flightHours;
     private final NameValidator location;
     private final IntValidator minPilots;
+
+    private final IntValidator maxPassengers;
+
+    private final IntValidator maxCargoA;
+    private final IntValidator maxCargoB;
+    private final IntValidator maxCargoC;
+
+    private final JCheckBox frontHatch;
+    private final JCheckBox sideHatch;
+    private final JCheckBox backHatch;
 
     public EditAircraftDialog(Aircraft aircraft, Runnable cancelCallback) {
         this.aircraft = aircraft;
@@ -102,6 +114,59 @@ public class EditAircraftDialog extends JDialog {
         line(11, new JLabel("Flight hours"), flightHoursField);
         line(12, new JLabel("Location"), locationField);
         line(13, new JLabel("Min pilots"), minPilotsField);
+
+        if(aircraft instanceof PassengerAircraft passengerAircraft) {
+            var passengersField = new JTextField(Integer.toString(passengerAircraft.getMaxPassengers()));
+            this.maxPassengers = new IntValidator(passengersField, 1, 2000);
+
+            line(14, new JLabel("Max passengers"), passengersField);
+        } else {
+            this.maxPassengers = null;
+        }
+
+        if(aircraft instanceof CargoAircraft cargoAircraft) {
+            var maxCargoAField = new JTextField(Integer.toString(cargoAircraft.getMaxCargoA()));
+            var maxCargoBField = new JTextField(Integer.toString(cargoAircraft.getMaxCargoB()));
+            var maxCargoCField = new JTextField(Integer.toString(cargoAircraft.getMaxCargoC()));
+
+            this.frontHatch = new JCheckBox("Front", cargoAircraft.isFrontHatch());
+            this.sideHatch = new JCheckBox("Side", cargoAircraft.isSideHatch());
+            this.backHatch = new JCheckBox("Back", cargoAircraft.isBackHatch());
+
+            this.maxCargoA = new IntValidator(maxCargoAField, 0);
+            this.maxCargoB = new IntValidator(maxCargoBField, 0);
+            this.maxCargoC = new IntValidator(maxCargoCField, 0);
+
+            var maxCargoPanel = new JPanel();
+            maxCargoPanel.setLayout(new BoxLayout(maxCargoPanel, BoxLayout.X_AXIS));
+
+            maxCargoPanel.add(maxCargoAField);
+            maxCargoPanel.add(Box.createHorizontalStrut(5));
+            maxCargoPanel.add(maxCargoBField);
+            maxCargoPanel.add(Box.createHorizontalStrut(5));
+            maxCargoPanel.add(maxCargoCField);
+
+            line(14, new JLabel("Max cargo"), maxCargoPanel);
+
+            var hatchesPanel = new JPanel();
+            hatchesPanel.setLayout(new BoxLayout(hatchesPanel, BoxLayout.X_AXIS));
+
+            hatchesPanel.add(frontHatch);
+            hatchesPanel.add(Box.createHorizontalStrut(5));
+            hatchesPanel.add(sideHatch);
+            hatchesPanel.add(Box.createHorizontalStrut(5));
+            hatchesPanel.add(backHatch);
+
+            line(15, new JLabel("Hatches"), hatchesPanel);
+        } else {
+            this.maxCargoA = null;
+            this.maxCargoB = null;
+            this.maxCargoC = null;
+
+            this.frontHatch = null;
+            this.backHatch = null;
+            this.sideHatch = null;
+        }
 
         var buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
@@ -214,6 +279,29 @@ public class EditAircraftDialog extends JDialog {
         var location = this.location.validate(batch);
         var minPilots = this.minPilots.validate(batch);
 
+        Integer maxPassengers = null;
+        if(aircraft instanceof PassengerAircraft) {
+            maxPassengers = this.maxPassengers.validate(batch);
+        }
+
+        Integer maxCargoA = null;
+        Integer maxCargoB = null;
+        Integer maxCargoC = null;
+
+        Boolean frontHatch = null;
+        Boolean sideHatch = null;
+        Boolean backHatch = null;
+
+        if(aircraft instanceof CargoAircraft) {
+            maxCargoA = this.maxCargoA.validate(batch);
+            maxCargoB = this.maxCargoB.validate(batch);
+            maxCargoC = this.maxCargoC.validate(batch);
+
+            frontHatch = this.frontHatch.isSelected();
+            sideHatch = this.sideHatch.isSelected();
+            backHatch = this.backHatch.isSelected();
+        }
+
         if(!batch.isOk()) {
             return;
         }
@@ -233,6 +321,20 @@ public class EditAircraftDialog extends JDialog {
         aircraft.setFlightHours(Objects.requireNonNull(flightHours));
         aircraft.setLocation(location);
         aircraft.setMinPilots(Objects.requireNonNull(minPilots));
+
+        if(aircraft instanceof PassengerAircraft passengerAircraft) {
+            passengerAircraft.setMaxPassengers(Objects.requireNonNull(maxPassengers));
+        }
+
+        if(aircraft instanceof CargoAircraft cargoAircraft) {
+            cargoAircraft.setMaxCargoA(Objects.requireNonNull(maxCargoA));
+            cargoAircraft.setMaxCargoB(Objects.requireNonNull(maxCargoB));
+            cargoAircraft.setMaxCargoC(Objects.requireNonNull(maxCargoC));
+
+            cargoAircraft.setFrontHatch(frontHatch);
+            cargoAircraft.setSideHatch(sideHatch);
+            cargoAircraft.setBackHatch(backHatch);
+        }
 
         this.dispose();
     }
