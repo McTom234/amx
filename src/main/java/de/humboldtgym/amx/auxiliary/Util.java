@@ -39,7 +39,12 @@ public final class Util {
     }
 
     public static JMenuItem runnableItem(String label, Runnable action) {
+        return runnableItem(label, action, null);
+    }
+
+    public static JMenuItem runnableItem(String label, Runnable action, KeyStroke accelerator) {
         var item = new JMenuItem(label);
+        item.setAccelerator(accelerator);
         item.addActionListener((e) -> action.run());
         return item;
     }

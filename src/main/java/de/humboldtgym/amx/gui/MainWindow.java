@@ -12,6 +12,8 @@ import de.humboldtgym.amx.gui.events.ReloadContentEvent;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -37,7 +39,7 @@ public class MainWindow extends JFrame {
         var fileMenu = new JMenu("File");
         menuBar.add(fileMenu);
 
-        fileMenu.add(Util.runnableItem("Exit", this::promptQuit));
+        fileMenu.add(Util.runnableItem("Exit", this::promptQuit, KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_DOWN_MASK)));
 
         var extrasMenu = new JMenu("Extras");
         menuBar.add(extrasMenu);
@@ -54,7 +56,7 @@ public class MainWindow extends JFrame {
         if(loadedSet != null) {
             setContentPane(new DataContentView());
 
-            fileMenu.add(Util.runnableItem("Save", this::saveData));
+            fileMenu.add(Util.runnableItem("Save", this::saveData, KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK)));
             fileMenu.add(Util.runnableItem("Unload data", () -> {
                 int selection = JOptionPane.showConfirmDialog(
                         this,
@@ -130,11 +132,27 @@ public class MainWindow extends JFrame {
 
         if(response == JFileChooser.APPROVE_OPTION) {
             var selected = saveChooser.getSelectedFile();
+
+            if(selected.exists()) {
+                int selection = JOptionPane.showConfirmDialog(
+                        this,
+                        "The file exists already, do you want to override it?",
+                        "Save data",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+
+                if(selection != JOptionPane.YES_OPTION) {
+                    return;
+                }
+            }
+
             Application.getInstance().getLogger().debug("Saving data to file {}", selected);
 
             try {
                 Application.getInstance().getDataManager().saveDataSet(selected.toPath());
             } catch (DataException e) {
+                Application.getInstance().getLogger().error("Failed to load data:", e);
                 JOptionPane.showMessageDialog(
                         this,
                         e.getMessage(),
