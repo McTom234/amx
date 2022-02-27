@@ -9,7 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import java.util.Date;
 import java.util.Random;
 
-public class PassengerPlane extends Plane {
+public class PassengerPlane extends Plane implements PassengerAircraft {
     private int maxPassengers;
 
     @JsonCreator
@@ -83,10 +83,12 @@ public class PassengerPlane extends Plane {
     }
 
     @JsonProperty
+    @Override
     public int getMaxPassengers() {
         return maxPassengers;
     }
 
+    @Override
     public void setMaxPassengers(int maxPassengers) {
         this.maxPassengers = maxPassengers;
     }

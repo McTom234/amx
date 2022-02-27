@@ -9,7 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import java.util.Date;
 import java.util.Random;
 
-public class CargoHelicopter extends Helicopter {
+public class CargoHelicopter extends Helicopter implements CargoAircraft {
 	private int maxCargoA;
 	private int maxCargoB;
 	private int maxCargoC;
@@ -95,55 +95,67 @@ public class CargoHelicopter extends Helicopter {
 	}
 
 	@JsonProperty
+	@Override
 	public int getMaxCargoA() {
 		return maxCargoA;
 	}
 
+	@Override
 	public void setMaxCargoA(int maxCargoA) {
 		this.maxCargoA = maxCargoA;
 	}
 
 	@JsonProperty
+	@Override
 	public int getMaxCargoB() {
 		return maxCargoB;
 	}
 
+	@Override
 	public void setMaxCargoB(int maxCargoB) {
 		this.maxCargoB = maxCargoB;
 	}
 
 	@JsonProperty
+	@Override
 	public int getMaxCargoC() {
 		return maxCargoC;
 	}
 
+	@Override
 	public void setMaxCargoC(int maxCargoC) {
 		this.maxCargoC = maxCargoC;
 	}
 
 	@JsonProperty
+	@Override
 	public boolean isFrontHatch() {
 		return frontHatch;
 	}
 
+	@Override
 	public void setFrontHatch(boolean frontHatch) {
 		this.frontHatch = frontHatch;
 	}
 
 	@JsonProperty
+	@Override
 	public boolean isSideHatch() {
 		return sideHatch;
 	}
 
+	@Override
 	public void setSideHatch(boolean sideHatch) {
 		this.sideHatch = sideHatch;
 	}
 
 	@JsonProperty
+	@Override
 	public boolean isBackHatch() {
 		return backHatch;
 	}
 
+	@Override
 	public void setBackHatch(boolean backHatch) {
 		this.backHatch = backHatch;
 	}
