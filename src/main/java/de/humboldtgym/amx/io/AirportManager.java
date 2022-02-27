@@ -60,6 +60,15 @@ public class AirportManager {
         return all.stream().findFirst().orElse(null);
     }
 
+    public Runway getLongestRunwayForAirport(String icao) {
+        var all = getRunwaysForAirport(icao);
+        if (all == null) {
+            return null;
+        }
+
+        return all.stream().max(Comparator.comparingInt(Runway::getLength)).orElse(null);
+    }
+
     public double computeDistance(String icaoA, String icaoB) throws InvalidDataException {
         Runway a = getFirstRunwayForAirport(icaoA);
         if (a == null) {
