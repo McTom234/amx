@@ -38,6 +38,6 @@ Nicht finalisierte Klassen und Pakete sind eingeklappt und nicht vollständig an
 ### Flugzeuge
 Alle fliegende Objekte haben gemeinsame Eigenschaften, wie z.B. eine eindeutige
 Registrierung, eine Spannweite der Flügel oder die Fähigkeit zu fliegen (Red Bull...).
-Grob kann man fliegende Objekte in Flugzeuge und Hubschrauber unterteilen. Da es aber
-Hubschrauber und Flugzeuge unter anderem als Fracht- und Passagiervariante ausgebaut
+Grob kann man fliegende Objekte in Flugzeuge und Hubschrauber unterteilen (und Unbekannte).
+Da es aber Hubschrauber und Flugzeuge unter anderem als Fracht- und Passagiervariante ausgebaut
 sind, kann man hier eine weitere Unterteilung vornehmen.

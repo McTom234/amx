@@ -104,7 +104,6 @@ public class EditAircraftDialog extends JDialog {
 
         realContent.setLayout(new GridBagLayout());
 
-
         addHeading("General", 1);
 
         line(2, new JLabel("Registration"), registrationField);
