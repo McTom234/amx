@@ -9,15 +9,13 @@ import de.humboldtgym.amx.models.aircraft.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.sql.Date;
 import java.time.ZoneId;
 import java.util.Objects;
 
 public class EditAircraftDialog extends JDialog {
     private final Aircraft aircraft;
-    private final Runnable cancelCallback;
+    private final Runnable doneCallback;
 
     private final JPanel realContent;
 
@@ -55,9 +53,9 @@ public class EditAircraftDialog extends JDialog {
     private final IntValidator rotors;
     private final DoubleValidator rotorSpan;
 
-    public EditAircraftDialog(Aircraft aircraft, Runnable cancelCallback) {
+    public EditAircraftDialog(Aircraft aircraft, Runnable doneCallback) {
         this.aircraft = aircraft;
-        this.cancelCallback = cancelCallback;
+        this.doneCallback = doneCallback;
 
         this.realContent = new JPanel();
 
@@ -110,16 +108,17 @@ public class EditAircraftDialog extends JDialog {
         line(1, new JLabel("ICAO"), icaoField);
         line(2, new JLabel("Length"), lengthField);
         line(3, new JLabel("Width"), widthField);
-        line(4, new JLabel("Knots"), flightSpeedField);
-        line(5, new JLabel("Empty weight"), emptyWeightField);
-        line(6, new JLabel("Max takeoff weight"), maxWeightField);
-        line(7, new JLabel("Max fuel"), maxFuelField);
-        line(8, new JLabel("Fuel per hour"), fuelPerHourField);
-        line(9, new JLabel("Maintenance interval"), maintenanceIntervalField);
-        line(10, new JLabel("Bought at"), this.bought);
-        line(11, new JLabel("Flight hours"), flightHoursField);
-        line(12, new JLabel("Location"), locationField);
-        line(13, new JLabel("Min pilots"), minPilotsField);
+        line(4, new JLabel("Height"), heightField);
+        line(5, new JLabel("Knots"), flightSpeedField);
+        line(6, new JLabel("Empty weight"), emptyWeightField);
+        line(7, new JLabel("Max takeoff weight"), maxWeightField);
+        line(8, new JLabel("Max fuel"), maxFuelField);
+        line(9, new JLabel("Fuel per hour"), fuelPerHourField);
+        line(10, new JLabel("Maintenance interval"), maintenanceIntervalField);
+        line(11, new JLabel("Bought at"), this.bought);
+        line(12, new JLabel("Flight hours"), flightHoursField);
+        line(13, new JLabel("Location"), locationField);
+        line(14, new JLabel("Min pilots"), minPilotsField);
 
         int nextLine = -1;
 
@@ -133,12 +132,12 @@ public class EditAircraftDialog extends JDialog {
             this.engines = new IntValidator(enginesField, 1, 16);
             this.winglets = new JCheckBox((String) null, plane.isWinglets());
 
-            line(14, new JLabel("Min runway length"), minRunwayLengthField);
-            line(15, new JLabel("Wing span"), wingSpanField);
-            line(16, new JLabel("Engine count"), enginesField);
-            line(17, new JLabel("Winglets"), this.winglets);
+            line(15, new JLabel("Min runway length"), minRunwayLengthField);
+            line(16, new JLabel("Wing span"), wingSpanField);
+            line(17, new JLabel("Engine count"), enginesField);
+            line(18, new JLabel("Winglets"), this.winglets);
 
-            nextLine = 18;
+            nextLine = 19;
         } else {
             this.minRunwayLength = null;
             this.wingSpan = null;
@@ -153,10 +152,10 @@ public class EditAircraftDialog extends JDialog {
             this.rotors = new IntValidator(rotorsField, 2);
             this.rotorSpan = new DoubleValidator(rotorSpanField, 5.0);
 
-            line(14, new JLabel("Rotor count"), rotorsField);
-            line(15, new JLabel("Rotor span"), rotorSpanField);
+            line(15, new JLabel("Rotor count"), rotorsField);
+            line(17, new JLabel("Rotor span"), rotorSpanField);
 
-            nextLine = 16;
+            nextLine = 17;
         } else {
             this.rotors = null;
             this.rotorSpan = null;
@@ -232,13 +231,6 @@ public class EditAircraftDialog extends JDialog {
 
         add(scroller, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
-
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                onUserClose(e);
-            }
-        });
     }
 
     private void line(int y, JComponent left, JComponent right) {
@@ -301,12 +293,6 @@ public class EditAircraftDialog extends JDialog {
         );
 
         return picker;
-    }
-
-    private void onUserClose(WindowEvent e) {
-        if(this.cancelCallback != null) {
-            this.cancelCallback.run();
-        }
     }
 
     private void ok(ActionEvent e) {
@@ -416,14 +402,14 @@ public class EditAircraftDialog extends JDialog {
             cargoAircraft.setBackHatch(Objects.requireNonNull(backHatch));
         }
 
+        if(this.doneCallback != null) {
+            this.doneCallback.run();
+        }
+
         this.dispose();
     }
 
     private void cancel(ActionEvent e) {
-        if(this.cancelCallback != null) {
-            this.cancelCallback.run();
-        }
-
         this.dispose();
     }
 }

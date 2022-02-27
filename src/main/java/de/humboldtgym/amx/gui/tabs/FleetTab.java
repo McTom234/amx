@@ -101,7 +101,7 @@ public class FleetTab extends JPanel {
     }
 
     private void onAdd() {
-        var typeDialog = new AircraftTypeDialog();
+        var typeDialog = new AircraftTypeDialog(this.table.getModel()::addAircraft);
         typeDialog.setLocationRelativeTo(null);
         typeDialog.setVisible(true);
     }

@@ -36,7 +36,7 @@ public abstract class Aircraft {
      * Aircraft's maximum flight weight in kilograms (kg).
      */
     private int maxWeight;
-    private WeightClass weightClass;
+
     /**
      * Aircraft's maximum fuel capacity in kilograms (kg).
      */
@@ -67,7 +67,6 @@ public abstract class Aircraft {
             int flightSpeedPerHour,
             int emptyWeight,
             int maxWeight,
-            WeightClass weightClass,
             int maxFuel,
             double fuelPerHour,
             int maintenanceInterval,
@@ -85,7 +84,6 @@ public abstract class Aircraft {
         this.flightSpeedPerHour = flightSpeedPerHour;
         this.emptyWeight = emptyWeight;
         this.maxWeight = maxWeight;
-        this.weightClass = weightClass;
         this.maxFuel = maxFuel;
         this.fuelPerHour = fuelPerHour;
         this.maintenanceInterval = maintenanceInterval;
@@ -223,11 +221,7 @@ public abstract class Aircraft {
     }
 
     public WeightClass getWeightClass() {
-        return weightClass;
-    }
-
-    public void setWeightClass(WeightClass weightClass) {
-        this.weightClass = weightClass;
+        return WeightClass.MEDIUM; // TODO: Compute!
     }
 
     @JsonProperty

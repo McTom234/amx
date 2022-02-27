@@ -57,6 +57,13 @@ public class AircraftTableModel extends AbstractTableModel {
         fireTableRowsDeleted(row, row);
     }
 
+    public void addAircraft(Aircraft aircraft) {
+        int newRow = this.availableAircraft.size();
+
+        this.availableAircraft.add(aircraft);
+        fireTableRowsInserted(newRow, newRow);
+    }
+
     public Aircraft getAircraft(int row) {
         return this.availableAircraft.get(row);
     }

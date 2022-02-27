@@ -6,12 +6,17 @@ import de.humboldtgym.amx.models.aircraft.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Date;
+import java.util.function.Consumer;
 
 public class AircraftTypeDialog extends JDialog {
+    private final Consumer<Aircraft> creationFinishedCallback;
+
     private final JRadioButton cargoButton;
     private final JRadioButton planeButton;
 
-    public AircraftTypeDialog() {
+    public AircraftTypeDialog(Consumer<Aircraft> creationFinishedCallback) {
+        this.creationFinishedCallback = creationFinishedCallback;
+
         setTitle("Select aircraft type");
         setModal(true);
         setType(Type.UTILITY);
@@ -73,7 +78,6 @@ public class AircraftTypeDialog extends JDialog {
                         0,
                         0,
                         0,
-                        null,
                         0,
                         0.0,
                         0,
@@ -103,7 +107,6 @@ public class AircraftTypeDialog extends JDialog {
                         0,
                         0,
                         0,
-                        null,
                         0,
                         0.0,
                         0,
@@ -133,7 +136,6 @@ public class AircraftTypeDialog extends JDialog {
                         0,
                         0,
                         0,
-                        null,
                         0,
                         0.0,
                         0,
@@ -158,7 +160,6 @@ public class AircraftTypeDialog extends JDialog {
                         0,
                         0,
                         0,
-                        null,
                         0,
                         0.0,
                         0,
@@ -174,7 +175,7 @@ public class AircraftTypeDialog extends JDialog {
             }
         }
 
-        var editDialog = new EditAircraftDialog(aircraft, null);
+        var editDialog = new EditAircraftDialog(aircraft, () -> creationFinishedCallback.accept(aircraft));
         editDialog.setLocationRelativeTo(this);
 
         dispose();
