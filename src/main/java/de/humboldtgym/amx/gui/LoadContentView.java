@@ -3,6 +3,8 @@ package de.humboldtgym.amx.gui;
 import de.humboldtgym.amx.Application;
 import de.humboldtgym.amx.exceptions.DataException;
 import de.humboldtgym.amx.gui.events.ReloadContentEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -11,6 +13,8 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 
 public class LoadContentView extends JPanel {
+    private static final Logger LOGGER = LogManager.getLogger();
+
     public LoadContentView() {
         setLayout(new GridBagLayout());
 
@@ -31,6 +35,7 @@ public class LoadContentView extends JPanel {
 
     private void openCallback(ActionEvent event) {
         var fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File("."));
         fileChooser.setDialogTitle("Open data set");
         fileChooser.setFileFilter(new FileFilter() {
             @Override
@@ -54,6 +59,7 @@ public class LoadContentView extends JPanel {
                 Application.getInstance().getDataManager().loadDataSet(selected.toPath());
                 SwingUtilities.getRoot(this).dispatchEvent(new ReloadContentEvent(this, false));
             } catch (DataException e) {
+                LOGGER.error("Failed to load data:", e);
                 JOptionPane.showMessageDialog(
                         this,
                         e.getMessage(),

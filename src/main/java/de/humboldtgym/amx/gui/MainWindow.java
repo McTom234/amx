@@ -2,10 +2,13 @@ package de.humboldtgym.amx.gui;
 
 import de.humboldtgym.amx.Application;
 import de.humboldtgym.amx.auxiliary.Util;
+import de.humboldtgym.amx.exceptions.DataException;
 import de.humboldtgym.amx.gui.events.ReloadContentEvent;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import java.awt.*;
+import java.io.File;
 
 public class MainWindow extends JFrame {
     public MainWindow() {
@@ -26,13 +29,17 @@ public class MainWindow extends JFrame {
 
         fileMenu.add(Util.runnableItem("Exit", this::dispose));
 
+        var extrasMenu = new JMenu("Extras");
+        menuBar.add(extrasMenu);
+
+        var themeMnu = new JMenu("Theme");
+        extrasMenu.add(themeMnu);
+
         if(loadedSet != null) {
             setContentPane(new DataContentView());
 
-            fileMenu.add(Util.runnableItem("Unload data", () -> {
-                Application.getInstance().getDataManager().unloadSet();
-                reloadContent(false);
-            }));
+            fileMenu.add(Util.runnableItem("Save", this::saveData));
+            fileMenu.add(Util.runnableItem("Unload data", this::unloadData));
 
 
             var dataMenu = new JMenu("Data");
@@ -71,5 +78,39 @@ public class MainWindow extends JFrame {
     private void unloadData() {
         Application.getInstance().getDataManager().unloadSet();
         reloadContent(false);
+    }
+
+    private void saveData() {
+        var saveChooser = new JFileChooser();
+        saveChooser.setDialogTitle("Select save location");
+        saveChooser.setFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory() || f.getName().endsWith(".json");
+            }
+
+            @Override
+            public String getDescription() {
+                return "Json";
+            }
+        });
+        saveChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int response = saveChooser.showSaveDialog(this);
+
+        if(response == JFileChooser.APPROVE_OPTION) {
+            var selected = saveChooser.getSelectedFile();
+            Application.getInstance().getLogger().debug("Saving data to file {}", selected);
+
+            try {
+                Application.getInstance().getDataManager().saveDataSet(selected.toPath());
+            } catch (DataException e) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        e.getMessage(),
+                        "Data loading failed",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        }
     }
 }

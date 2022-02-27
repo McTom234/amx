@@ -141,4 +141,29 @@ public class Airline {
     public void setWeightCargoC(double weightCargoC) {
         this.weightCargoC = weightCargoC;
     }
+
+    @JsonProperty
+    public List<Aircraft> getFleet() {
+        return fleet;
+    }
+
+    @JsonProperty
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    @JsonProperty
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    @JsonProperty
+    public List<Flight> getFlights() {
+        return flights;
+    }
+
+    @JsonProperty
+    public List<Route> getRoutes() {
+        return routes;
+    }
 }

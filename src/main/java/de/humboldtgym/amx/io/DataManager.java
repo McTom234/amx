@@ -24,7 +24,7 @@ public class DataManager {
 
     public void loadDataSet(Path jsonInput) throws DataException {
         try (InputStream in = Files.newInputStream(jsonInput)) {
-            this.loadedSet = reader.readValue(in);
+            this.loadedSet = reader.forType(DataSet.class).readValue(in);
         } catch (JsonParseException e) {
             throw new DataException("Corrupted Json received", e);
         } catch (IOException e) {
