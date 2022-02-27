@@ -29,7 +29,10 @@ public class InlineColorChooser extends JPanel {
     }
 
     private void onChoose(ActionEvent e) {
-        this.color = JColorChooser.showDialog(this, "Choose a new color", color, false);
-        this.display.setBackground(color);
+        var newColor = JColorChooser.showDialog(this, "Choose a new color", color, false);
+        if (newColor != null) {
+            this.color = newColor;
+            this.display.setBackground(color);
+        }
     }
 }
