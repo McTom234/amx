@@ -234,7 +234,10 @@ public abstract class Aircraft {
 
     @JsonIgnore
     public WeightClass getWeightClass() {
-        return WeightClass.MEDIUM; // TODO: Compute!
+        if (this.maxWeight < 7000) return WeightClass.LIGHT;
+        else if (this.maxWeight < 136000) return WeightClass.MEDIUM;
+        else if (this.maxWeight < 560000) return WeightClass.HEAVY;
+        else return WeightClass.SUPER;
     }
 
     @JsonProperty
